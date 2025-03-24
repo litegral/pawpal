@@ -72,7 +72,8 @@ class CatProfileActivity : AppCompatActivity() {
             .setMessage("Are you sure you want to adopt this cat?")
             .setPositiveButton("Yes") { _, _ ->
                 // Handle adoption confirmation
-                Toast.makeText(this, "Adoption request sent!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@CatProfileActivity, CatForm::class.java)
+                startActivity(intent)
             }
             .setNegativeButton("Cancel", null)
             .show()
