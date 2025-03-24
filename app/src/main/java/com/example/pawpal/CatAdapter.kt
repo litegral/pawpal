@@ -1,5 +1,6 @@
 package com.example.pawpal
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         val cat = cats[position]
 
-        // Set cat image (you'll need to use a library like Glide/Picasso for real images)
+        // Set cat image
         holder.catImage.setImageResource(cat.imageResId)
 
         // Set text fields
@@ -37,8 +38,13 @@ class CatAdapter(private val cats: List<Cat>) : RecyclerView.Adapter<CatAdapter.
         holder.catGender.text = "Jenis Kelamin: ${cat.gender}"
         holder.catLocation.text = "Lokasi: ${cat.location}"
 
-        // Set status chip
+        // Set status chip and handle click
         holder.catStatusChip.text = cat.status
+        holder.catStatusChip.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, CatProfileActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount() = cats.size
