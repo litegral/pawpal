@@ -1,18 +1,6 @@
 # 🐾 Panduan Kontribusi Proyek Pawpal
 
-Panduan ini dibuat supaya semua anggota tim bisa ikut kontribusi ke codebase **Pawpal** dengan alur yang jelas dan terstruktur. Kita pakai alur yang biasa dipakai di proyek open source, jadi bisa sekalian belajar cara kerja kolaboratif yang baik.
-
-```table-of-contents
-title: 
-style: nestedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
-minLevel: 2 # Include headings from the specified level
-maxLevel: 0 # Include headings up to the specified level
-includeLinks: true # Make headings clickable
-hideWhenEmpty: false # Hide TOC if no headings are found
-debugInConsole: false # Print debug info in Obsidian console
-```
-
----
+Panduan ini dibuat agar semua anggota tim bisa ikut kontribusi ke codebase **Pawpal** dengan alur yang jelas dan terstruktur. Alur ini adalah alur yang biasa dipakai di proyek open source, jadi bisa sekalian belajar cara kerja kolaboratif yang baik.
 
 ## ⚙️ Alur Kontribusi Utama
 
