@@ -1,4 +1,4 @@
-package com.example.pawpal
+package com.litegral.pawpal
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

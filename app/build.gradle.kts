@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pawpal"
+    namespace = "com.litegral.pawpal"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.pawpal"
+        applicationId = "com.litegral.pawpal"
         minSdk = 29
         targetSdk = 35
         versionCode = 1

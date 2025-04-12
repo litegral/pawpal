@@ -1,4 +1,4 @@
-package com.example.pawpal
+package com.litegral.pawpal
 
 import org.junit.Test
 
