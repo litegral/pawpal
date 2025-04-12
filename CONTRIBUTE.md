@@ -1,18 +1,6 @@
 # 🐾 Panduan Kontribusi Proyek Pawpal
 
-Panduan ini dibuat supaya semua anggota tim bisa ikut kontribusi ke codebase **Pawpal** dengan alur yang jelas dan terstruktur. Kita pakai alur yang biasa dipakai di proyek open source, jadi bisa sekalian belajar cara kerja kolaboratif yang baik.
-
-```table-of-contents
-title: 
-style: nestedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
-minLevel: 2 # Include headings from the specified level
-maxLevel: 0 # Include headings up to the specified level
-includeLinks: true # Make headings clickable
-hideWhenEmpty: false # Hide TOC if no headings are found
-debugInConsole: false # Print debug info in Obsidian console
-```
-
----
+Panduan ini dibuat agar semua anggota tim bisa ikut kontribusi ke codebase Pawpal dengan alur yang jelas dan terstruktur. Alur ini adalah alur yang biasa dipakai di proyek open source, jadi bisa sekalian belajar cara kerja kolaboratif yang baik.
 
 ## ⚙️ Alur Kontribusi Utama
 
@@ -31,13 +19,33 @@ cd pawpal
 
 ---
 
-### 2. **Buat Branch Baru**
+### 2. **Tambahkan Remote Upstream**
+
+Remote `upstream` dibutuhkan supaya kita bisa sinkronisasi dengan repository utama secara langsung.
+
+```bash
+git remote add upstream https://github.com/litegral/pawpal.git
+```
+
+> Gantilah `ORIGINAL_OWNER` dengan nama GitHub dari repo utama.
+
+Untuk memastikan sudah ditambahkan:
+
+```bash
+git remote -v
+```
+
+📘 Referensi: [GitHub Docs - Configuring a remote for a fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#configure-git-to-sync-your-fork-with-the-original-repository)
+
+---
+
+### 3. **Buat Branch Baru**
 
 Sebelum mulai ngoding, buat branch baru dari `main`. Ini penting supaya perubahan kita nggak langsung nyentuh code utama.
 
 ```bash
 git checkout main
-git pull origin main
+git pull upstream main
 git checkout -b fitur/nama-fitur
 ```
 
@@ -51,7 +59,7 @@ git checkout -b fitur/jurnal-kucing
 
 ---
 
-### 3. **Kerjakan Perubahan di Branch Tersebut**
+### 4. **Kerjakan Perubahan di Branch Tersebut**
 
 Mulai kerjakan task kamu di branch yang sudah dibuat. Usahakan satu branch hanya untuk satu fitur atau perbaikan biar gampang direview.
 
@@ -59,7 +67,7 @@ Kalau ada error atau test belum jalan, perbaiki dulu sebelum lanjut ke langkah b
 
 ---
 
-### 4. **Commit Perubahan Secara Teratur**
+### 5. **Commit Perubahan Secara Teratur**
 
 Setiap kali ada perubahan signifikan, lakukan commit. Gunakan pesan commit yang jelas dan singkat.
 
@@ -79,7 +87,7 @@ Prefix yang umum:
 
 ---
 
-### 5. **Push Branch ke GitHub**
+### 6. **Push Branch ke GitHub**
 
 Kalau sudah selesai dan yakin tidak ada error:
 
@@ -89,7 +97,7 @@ git push origin fitur/nama-fitur
 
 ---
 
-### 6. **Buat Pull Request (PR)**
+### 7. **Buat Pull Request (PR)**
 
 Setelah push, buka GitHub lalu klik tombol **Compare & pull request**. Isi deskripsi PR dengan informasi yang jelas:
 
@@ -100,7 +108,7 @@ Setelah push, buka GitHub lalu klik tombol **Compare & pull request**. Isi deskr
 
 ---
 
-### 7. **Tunggu Review & Lakukan Revisi Jika Diperlukan**
+### 8. **Tunggu Review & Lakukan Revisi Jika Diperlukan**
 
 Repo maintainer akan mereview PR kamu. Kalau ada masukan, perbaiki di branch yang sama lalu push ulang:
 
@@ -112,9 +120,23 @@ git push origin fitur/nama-fitur
 
 ---
 
-### 8. **Merge ke Main (oleh PIC)**
+### 9. **Merge ke Main (oleh PIC)**
 
 Kalau PR sudah disetujui dan tidak ada konflik, maka branch akan di-merge ke `main` oleh maintainer.
+
+---
+
+## 🔄 Sinkronisasi Fork dengan Repository Utama
+
+Sebelum memulai task baru atau membuat branch baru, pastikan `main` kamu selalu update dengan repo utama:
+
+```bash
+git checkout main
+git fetch upstream
+git merge upstream/main
+```
+
+Langkah ini membantu mencegah konflik saat kamu membuat pull request.
 
 ---
 
@@ -125,6 +147,7 @@ Kalau PR sudah disetujui dan tidak ada konflik, maka branch akan di-merge ke `ma
 - Pastikan kode sudah dicek sebelum push
 - Gunakan pesan commit yang informatif
 - Buat PR yang rapi dan jelas
+- Selalu sync dengan upstream sebelum kerja
 
 ---
 
