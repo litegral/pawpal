@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Pawpal" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/fuzzy</item>
+        <item name="fontFamily">@font/fuzzy</item>
+
+        <!-- Set background color -->
+        <item name="android:colorBackground">#EEF2FB</item>
+        <item name="android:windowBackground">#EEF2FB</item>
+    </style>
+
+    <style name="Theme.Pawpal" parent="Base.Theme.Pawpal" />
+</resources>

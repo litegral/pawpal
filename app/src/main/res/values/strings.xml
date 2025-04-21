@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Pawpal</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="forgot_password">forgot password?</string>
+    <string name="sign_in">sign in</string>
+    <string name="cat_sleeping">cat sleeping</string>
+    <string name="name">name</string>
+    <string name="already_have_an_account">already have an account?</string>
+    <string name="sign_up">sign up</string>
+</resources>
