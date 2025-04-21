@@ -36,6 +36,9 @@ android {
 }
 
 dependencies {
+    // Views/Fragments Integration
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment"
+    >
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.litegral.pawpal.HomeFragment"
+        android:label="Home" />
+
+
+    <fragment
+        android:id="@+id/adoptionFragment"
+        android:name="com.litegral.pawpal.AdoptionFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/journalFragment"
+        android:name="com.litegral.pawpal.JournalFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="com.litegral.pawpal.MatchFragment"
+        android:label="Home" />
+
+</navigation>
