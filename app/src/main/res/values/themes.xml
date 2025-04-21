@@ -3,10 +3,13 @@
     <style name="Base.Theme.Pawpal" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/fuzzy</item>
         <item name="fontFamily">@font/fuzzy</item>
-
-        <!-- Set background color -->
         <item name="android:colorBackground">#EEF2FB</item>
         <item name="android:windowBackground">#EEF2FB</item>
+
+        <!-- Override Material 3 container colors -->
+        <item name="colorPrimaryContainer">@android:color/transparent</item>
+        <item name="colorSecondaryContainer">@android:color/transparent</item>
+        <item name="colorTertiaryContainer">@android:color/transparent</item>
     </style>
 
     <style name="Theme.Pawpal" parent="Base.Theme.Pawpal" />
