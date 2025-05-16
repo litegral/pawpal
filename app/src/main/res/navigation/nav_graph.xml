@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment"
-    >
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -14,16 +13,51 @@
     <fragment
         android:id="@+id/adoptionFragment"
         android:name="com.litegral.pawpal.AdoptionFragment"
-        android:label="Home" />
+        android:label="Adoption" />
 
     <fragment
         android:id="@+id/journalFragment"
         android:name="com.litegral.pawpal.JournalFragment"
-        android:label="Home" />
+        android:label="Journal" />
 
     <fragment
         android:id="@+id/matchFragment"
         android:name="com.litegral.pawpal.MatchFragment"
-        android:label="Home" />
+        android:label="Match">
 
+        <action
+            android:id="@+id/action_matchFragment_to_swipeFragment"
+            app:destination="@id/swipeFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/swipeFragment"
+        android:name="com.litegral.pawpal.SwipeFragment"
+        android:label="Swipe">
+
+        <action
+            android:id="@+id/action_swipeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+
+        <action
+            android:id="@+id/action_swipeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.litegral.pawpal.HistoryFragment"
+        android:label="History">
+        <action
+            android:id="@+id/action_historyFragment_to_swipeFragment"
+            app:destination="@id/swipeFragment"
+            app:popUpTo="@id/swipeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.litegral.pawpal.ProfileFragment"
+        android:label="fragment_profile" />
 </navigation>

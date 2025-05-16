@@ -8,4 +8,5 @@
     <color name="dark_border">#7d7d7d</color>
     <color name="light_border">#707070</color>
     <color name="lighter_border">#c8c8c8</color>
+    <color name="card_bg">#d6d9e1</color>
 </resources>
