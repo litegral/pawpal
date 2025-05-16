@@ -3,6 +3,7 @@
     <string name="email">email</string>
     <string name="password">password</string>
     <string name="forgot_password">forgot password?</string>
+    <string name="dont_have_account">don\'t have an account?</string>
     <string name="sign_in">sign in</string>
     <string name="cat_sleeping">cat sleeping</string>
     <string name="name">name</string>

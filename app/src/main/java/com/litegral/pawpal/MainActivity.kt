@@ -1,17 +1,33 @@
 package com.litegral.pawpal
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        auth = FirebaseAuth.getInstance()
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // No user is signed in, redirect to SignInActivity
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+            finish() // Finish MainActivity so the user can't go back to it without signing in
+            return // Return early to prevent further execution in this activity
+        }
 
         // Find the NavHostFragment and NavController
         val navHostFragment = supportFragmentManager
