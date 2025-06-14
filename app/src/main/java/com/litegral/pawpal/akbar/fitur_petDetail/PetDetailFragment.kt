@@ -82,7 +82,8 @@ class PetDetailFragment : Fragment() {
         }
         buttonAdoptMe.setOnClickListener {
             try {
-                findNavController().navigate(R.id.action_petDetailFragment_to_adoptionFormFragment)
+                val action = PetDetailFragmentDirections.actionPetDetailFragmentToSubmitRequestFragment(args.petId)
+                findNavController().navigate(action)
             } catch (e: Exception) {
                 Log.e("PetDetailFragment", "Navigasi ke AdoptionFormFragment gagal: ${e.message}")
             }
