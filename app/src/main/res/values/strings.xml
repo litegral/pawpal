@@ -10,4 +10,19 @@
     <string name="already_have_an_account">already have an account?</string>
     <string name="sign_up">sign up</string>
     <string name="match_onboarding_heading">Let\'s Find Your Purrfect Match!</string>
+
+    <!-- Akbar Workspace -->
+    <!-- Warning : Dont change anything -->
+
+        <string-array name="gender_array">
+            <item>Male</item>
+            <item>Female</item>
+        </string-array>
+
+    <string name="click_to_edit">Click to edit</string>
+
+    <!-- Akabr Workspace End -->
+
+
+
 </resources>
