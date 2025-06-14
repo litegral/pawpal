@@ -65,22 +65,28 @@ class PostingOpenAdoptHistoryFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // Inisialisasi adapter dengan list kosong, lalu berikan fungsi untuk menangani klik
-        historyAdapter = PostingOpenAdoptHistoryAdapter(postList) { selectedPost ->
-            Log.d("PostingHistory", "Item diklik: ${selectedPost.name} dengan ID: ${selectedPost.id}")
-            if (selectedPost.id.isNotBlank()) {
-                try {
-                    // Navigasi ke halaman Update dengan mengirim petId
+        historyAdapter = PostingOpenAdoptHistoryAdapter(
+            postList,
+            onEditClicked = { selectedPost ->
+                // This is the original logic for editing a post
+                if (selectedPost.id.isNotBlank()) {
                     val action = PostingOpenAdoptHistoryFragmentDirections.actionPostingOpenAdoptHistoryFragmentToUpdatePostFragment(selectedPost.id)
                     findNavController().navigate(action)
-                } catch (e: Exception) {
-                    Log.e("PostingHistory", "Navigasi ke UpdatePostFragment gagal: ${e.message}")
-                    Toast.makeText(context, "Gagal membuka halaman edit.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.e("PostingHistory", "ID Hewan kosong, navigasi edit dibatalkan.")
                 }
-            } else {
-                Log.e("PostingHistory", "ID Hewan kosong, navigasi dibatalkan.")
+            },
+            onViewRequestsClicked = { selectedPost ->
+                // NEW: Navigate to the list of requests for this specific pet
+                if (selectedPost.id.isNotBlank()) {
+                    // We will create this navigation action in the next step
+                    val action = PostingOpenAdoptHistoryFragmentDirections.actionPostingOpenAdoptHistoryFragmentToRequestListFragment(selectedPost.id)
+                    findNavController().navigate(action)
+                } else {
+                    Log.e("PostingHistory", "ID Hewan kosong, navigasi view requests dibatalkan.")
+                }
             }
-        }
+        )
         recyclerViewHistory.layoutManager = LinearLayoutManager(context)
         recyclerViewHistory.adapter = historyAdapter
     }

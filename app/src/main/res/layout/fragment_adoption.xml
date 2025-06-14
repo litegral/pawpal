@@ -3,15 +3,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".akbar.fitur_adoption.CatAdoptionHubFragment">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView_hub_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adoption"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="64dp"
+        android:text="Cat Adoption Hub"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView_hub_cat"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/ic_cat_orange"
+        android:contentDescription="Cat illustration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_hub_title" />
+
+    <TextView
+        android:id="@+id/textView_hub_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Are you a ... ??"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_hub_cat" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cat_adopter"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:text="Cat Adopter"
+        android:textSize="18sp"
+        app:backgroundTint="#4A4A4A"
+        app:cornerRadius="35dp"
+        app:icon="@drawable/ic_adopter"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_hub_question" />
+
+    <TextView
+        android:id="@+id/textView_adopter_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Request to adopt your perfect cat(s)"
+        android:textColor="#666666"
+        app:layout_constraintEnd_toEndOf="@+id/button_cat_adopter"
+        app:layout_constraintStart_toStartOf="@+id/button_cat_adopter"
+        app:layout_constraintTop_toBottomOf="@+id/button_cat_adopter" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cat_owner"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
+        android:text="Cat Owner"
+        android:textSize="18sp"
+        app:backgroundTint="#4A4A4A"
+        app:cornerRadius="35dp"
+        app:icon="@drawable/ic_owner"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_adopter_subtitle" />
+
+    <TextView
+        android:id="@+id/textView_owner_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manage adoption requests for your cats"
+        android:textColor="#666666"
+        app:layout_constraintEnd_toEndOf="@+id/button_cat_owner"
+        app:layout_constraintStart_toStartOf="@+id/button_cat_owner"
+        app:layout_constraintTop_toBottomOf="@+id/button_cat_owner" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,3 @@
-// Pastikan package ini sesuai dengan lokasi file Anda
 package com.litegral.pawpal
 
 import android.app.Activity
