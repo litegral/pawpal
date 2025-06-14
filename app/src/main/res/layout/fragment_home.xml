@@ -3,28 +3,164 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".akbar.HomeFragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image_home_top"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_profile_placeholder"
+        app:civ_border_width="1dp"
+        app:civ_border_color="#CCCCCC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/profile_name_home_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+        android:layout_marginEnd="8dp"
+        android:text="Akbar M"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image_home_top"
+        app:layout_constraintEnd_toStartOf="@+id/profile_image_home_top"
+        app:layout_constraintTop_toTopOf="@+id/profile_image_home_top" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_logout_home"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:minHeight="0dp"
+        android:padding="0dp"
+        android:text="Logout"
+        android:textColor="#D32F2F"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image_home_top"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image_home_top" />
+
+    <ImageView
+        android:id="@+id/banner"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/banner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@+id/button_logout_home" />
 
-    <Button
-        android:id="@+id/logoutButton"
+    <TextView
+        android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:fontFamily="@font/fuzzy_bubbles_regular"
+        android:text="Give Them a Home\nand They’ll Give You \na Lifetime of Love."
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/banner"
+        app:layout_constraintStart_toStartOf="@+id/banner"
+        app:layout_constraintTop_toTopOf="@+id/banner"
+        app:layout_constraintVertical_bias="0.203" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="130dp"
+        android:layout_height="136dp"
+        app:layout_constraintBottom_toBottomOf="@+id/banner"
+        app:layout_constraintEnd_toEndOf="@+id/banner"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/banner"
+        app:layout_constraintTop_toTopOf="@+id/banner"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/bannerkucing" />
+
+    <TextView
+        android:id="@+id/textLabelCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="Category"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
+
+    <HorizontalScrollView
+        android:id="@+id/filterScroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Logout"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textLabelCategory">
+        <LinearLayout
+            android:id="@+id/filterButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCat"
+                style="@style/FilterButton" android:text="Cat" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnDog"
+                style="@style/FilterButton" android:text="Dog" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAge"
+                style="@style/FilterButton" android:state_selected="true" android:text="Age" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnMale"
+                style="@style/FilterButton" android:text="Male" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFemale"
+                style="@style/FilterButton" android:text="Female" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/filterScroll"
+        tools:listitem="@layout/item_cat" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_home"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_new_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/plus_logo"
+        app:tint="@android:color/white"
+        android:backgroundTint="#4CAF50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:elevation="6dp"
+        android:contentDescription="Tambah Postingan Adopsi Baru" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
+<!--Akbar Workspace-->
+    <!--WARNING : delete this code absolutely causing fatal error -->
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.litegral.pawpal.HomeFragment"
-        android:label="Home" />
+        android:name="com.litegral.pawpal.akbar.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_petDetailFragment"
+            app:destination="@id/petDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_postingOpenAdoptHistoryFragment"
+            app:destination="@id/postingOpenAdoptHistoryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/postingOpenAdoptHistoryFragment"
+        android:name="com.litegral.pawpal.akbar.PostingOpenAdoptHistoryFragment"
+        android:label="Riwayat Postingan"
+        tools:layout="@layout/fragment_posting_open_adopt_history" >
+        <action
+            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_updatePostFragment"
+            app:destination="@id/updatePostFragment" />
+        <action
+            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_createAdoptPostFragment"
+            app:destination="@id/createAdoptPostFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/updatePostFragment"
+        android:name="com.litegral.pawpal.akbar.UpdatePostFragment"
+        android:label="Update Post"
+        tools:layout="@layout/fragment_update_post">
+        <argument
+            android:name="petId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_updatePostFragment_to_createAdoptPostFragment"
+            app:destination="@id/createAdoptPostFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createAdoptPostFragment"
+        android:name="com.litegral.pawpal.akbar.CreateAdoptPostFragment"
+        android:label="Create/Edit Post"
+        tools:layout="@layout/fragment_create_adopt_post" >
+        <argument
+            android:name="petId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/petDetailFragment"
+        android:name="com.litegral.pawpal.akbar.PetDetailFragment"
+        android:label="Detail Hewan"
+        tools:layout="@layout/fragment_pet_detail">
+
+        <action
+            android:id="@+id/action_petDetailFragment_to_adoptionFormFragment"
+            app:destination="@id/adoptionFragment"/>
+
+        <argument
+            android:name="petId"
+            app:argType="string" />
+    </fragment>
+
+
+
+
+
+<!--    Akbar Workspace End-->
 
 
     <fragment
         android:id="@+id/adoptionFragment"
-        android:name="com.litegral.pawpal.AdoptionFragment"
-        android:label="Adoption" />
+        android:name="com.litegral.pawpal.AdoptionFragment" android:label="Adoption"
+        tools:layout="@layout/fragment_adoption"> <argument
+        android:name="petId"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/journalFragment"
