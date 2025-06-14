@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_homeFragment_to_postingOpenAdoptHistoryFragment"
             app:destination="@id/postingOpenAdoptHistoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -135,5 +138,7 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.litegral.pawpal.ProfileFragment"
-        android:label="fragment_profile" />
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>

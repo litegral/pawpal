@@ -107,6 +107,7 @@ class SignUpActivity : AppCompatActivity() {
             "uid" to userId,
             "displayName" to name,
             "email" to user.email,
+            "profilePhotoUrl" to "", // <-- TAMBAHKAN INI: beri nilai awal kosong
             "createdAt" to FieldValue.serverTimestamp()
         )
         userDocumentRef.set(userData).addOnSuccessListener {
