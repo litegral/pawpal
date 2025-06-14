@@ -1,5 +1,5 @@
 // Pastikan file ini ada di package: com.litegral.pawpal.akbar
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.fitur_petDetail.adapter
 
 import android.view.LayoutInflater
 import android.view.View

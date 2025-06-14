@@ -1,4 +1,4 @@
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.litegral.pawpal.R
+import com.litegral.pawpal.akbar.model.CatModel
 
 class PostingOpenAdoptHistoryAdapter(
     private val postList: List<CatModel>,

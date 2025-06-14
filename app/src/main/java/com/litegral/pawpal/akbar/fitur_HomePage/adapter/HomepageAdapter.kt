@@ -1,5 +1,5 @@
 // Pastikan file ini ada di package: com.litegral.pawpal.akbar
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.fitur_HomePage.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.litegral.pawpal.R
-import com.litegral.pawpal.akbar.CatModel
+import com.litegral.pawpal.akbar.model.CatModel
 
 class HomepageAdapter(
     private var petList: List<CatModel>,

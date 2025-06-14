@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F4FF"
-    tools:context=".akbar.UpdatePostFragment">
+    tools:context=".akbar.fitur_ListOpenAdoptOfUser.UpdatePostFragment">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager_pet_images_update"

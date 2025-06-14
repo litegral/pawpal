@@ -1,4 +1,4 @@
-package com.litegral.pawpal.akbar // Sesuaikan package Anda
+package com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser // Sesuaikan package Anda
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -21,6 +21,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.litegral.pawpal.R
+import com.litegral.pawpal.akbar.model.CatModel
+import com.litegral.pawpal.akbar.fitur_petDetail.adapter.PetImageSliderAdapter
 
 class UpdatePostFragment : Fragment() {
 

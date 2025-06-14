@@ -1,5 +1,5 @@
 // di package com.litegral.pawpal.akbar
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.model
 
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude

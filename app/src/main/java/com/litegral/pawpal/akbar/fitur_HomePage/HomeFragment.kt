@@ -1,5 +1,5 @@
 // Pastikan package ini sesuai dengan lokasi file Anda
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.fitur_HomePage
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.litegral.pawpal.SignInActivity
 import com.litegral.pawpal.R
+import com.litegral.pawpal.akbar.model.CatModel
+import com.litegral.pawpal.akbar.fitur_HomePage.adapter.HomepageAdapter
+
 class HomeFragment : Fragment() {
 
     // Views

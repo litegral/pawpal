@@ -1,10 +1,9 @@
 // Semua file berada di dalam package 'akbar'
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.fitur_createOpenAdopt
 
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,17 +18,16 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.litegral.pawpal.R
+import com.litegral.pawpal.akbar.model.CatModel
 import java.util.UUID
 
 class CreateAdoptPostFragment : Fragment() {

@@ -9,7 +9,7 @@
     <!--WARNING : delete this code absolutely causing fatal error -->
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.litegral.pawpal.akbar.HomeFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_HomePage.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/postingOpenAdoptHistoryFragment"
-        android:name="com.litegral.pawpal.akbar.PostingOpenAdoptHistoryFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser.PostingOpenAdoptHistoryFragment"
         android:label="Riwayat Postingan"
         tools:layout="@layout/fragment_posting_open_adopt_history" >
         <action
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/updatePostFragment"
-        android:name="com.litegral.pawpal.akbar.UpdatePostFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser.UpdatePostFragment"
         android:label="Update Post"
         tools:layout="@layout/fragment_update_post">
         <argument
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/createAdoptPostFragment"
-        android:name="com.litegral.pawpal.akbar.CreateAdoptPostFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_createOpenAdopt.CreateAdoptPostFragment"
         android:label="Create/Edit Post"
         tools:layout="@layout/fragment_create_adopt_post" >
         <argument
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/petDetailFragment"
-        android:name="com.litegral.pawpal.akbar.PetDetailFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_petDetail.PetDetailFragment"
         android:label="Detail Hewan"
         tools:layout="@layout/fragment_pet_detail">
 

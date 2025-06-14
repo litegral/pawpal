@@ -1,5 +1,5 @@
 // Pastikan file ini ada di package: com.litegral.pawpal.akbar
-package com.litegral.pawpal.akbar
+package com.litegral.pawpal.akbar.fitur_petDetail
 
 import android.graphics.Color
 import android.os.Bundle
@@ -21,6 +21,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.litegral.pawpal.R
+import com.litegral.pawpal.akbar.model.CatModel
+import com.litegral.pawpal.akbar.fitur_petDetail.adapter.PetImageSliderAdapter
 
 class PetDetailFragment : Fragment() {
 

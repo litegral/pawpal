@@ -1,4 +1,4 @@
-package com.litegral.pawpal.akbar // Sesuaikan package Anda
+package com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser // Sesuaikan package Anda
 
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.litegral.pawpal.R
+import com.litegral.pawpal.akbar.model.CatModel
+import com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser.adapter.PostingOpenAdoptHistoryAdapter
 
 class PostingOpenAdoptHistoryFragment : Fragment() {
 
