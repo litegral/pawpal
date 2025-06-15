@@ -13,9 +13,10 @@ import com.litegral.pawpal.dhika.ResourceContentFragment
 
 class JournalFragment : Fragment(), FragmentManager.OnBackStackChangedListener {
 
-    private val journalFragment by lazy { JournalContentFragment() }
-    private val resourceFragment by lazy { ResourceContentFragment() }
-    private var activeFragment: Fragment = journalFragment
+    // Hapus inisialisasi lazy untuk mengelola instance secara manual
+    private var journalFragment: Fragment? = null
+    private var resourceFragment: Fragment? = null
+    private var activeFragment: Fragment? = null
 
     private lateinit var btnJournal: Button
     private lateinit var btnResource: Button
@@ -38,18 +39,44 @@ class JournalFragment : Fragment(), FragmentManager.OnBackStackChangedListener {
 
         childFragmentManager.addOnBackStackChangedListener(this)
 
-        if (savedInstanceState == null) {
-            // Menggunakan childFragmentManager untuk mengelola fragment di dalam container
-            childFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, resourceFragment, "resource_content").hide(resourceFragment)
-                .add(R.id.fragment_container, journalFragment, "journal_content")
-                .commit()
-            updateButtonUI(isJournalSelected = true)
+        // Cari fragmen yang sudah ada atau buat yang baru
+        // Ini mencegah duplikasi saat fragment di-recreate
+        journalFragment = childFragmentManager.findFragmentByTag("journal_content")
+        resourceFragment = childFragmentManager.findFragmentByTag("resource_content")
+
+        val transaction = childFragmentManager.beginTransaction()
+
+        if (journalFragment == null) {
+            journalFragment = JournalContentFragment()
+            transaction.add(R.id.fragment_container, journalFragment!!, "journal_content")
         }
+
+        if (resourceFragment == null) {
+            resourceFragment = ResourceContentFragment()
+            transaction.add(R.id.fragment_container, resourceFragment!!, "resource_content")
+        }
+
+        // Tentukan fragmen aktif dan sembunyikan yang lain
+        // Cek fragmen mana yang saat ini terlihat, atau default ke journalFragment
+        activeFragment = when {
+            resourceFragment?.isResumed == true -> resourceFragment
+            else -> journalFragment
+        }
+
+        if (activeFragment == journalFragment) {
+            resourceFragment?.let { transaction.hide(it) }
+            journalFragment?.let { transaction.show(it) }
+            updateButtonUI(isJournalSelected = true)
+        } else {
+            journalFragment?.let { transaction.hide(it) }
+            resourceFragment?.let { transaction.show(it) }
+            updateButtonUI(isJournalSelected = false)
+        }
+        transaction.commit()
 
         btnJournal.setOnClickListener {
             if (activeFragment != journalFragment) {
-                childFragmentManager.beginTransaction().hide(activeFragment).show(journalFragment).commit()
+                childFragmentManager.beginTransaction().hide(activeFragment!!).show(journalFragment!!).commit()
                 activeFragment = journalFragment
                 updateButtonUI(isJournalSelected = true)
             }
@@ -57,7 +84,7 @@ class JournalFragment : Fragment(), FragmentManager.OnBackStackChangedListener {
 
         btnResource.setOnClickListener {
             if (activeFragment != resourceFragment) {
-                childFragmentManager.beginTransaction().hide(activeFragment).show(resourceFragment).commit()
+                childFragmentManager.beginTransaction().hide(activeFragment!!).show(resourceFragment!!).commit()
                 activeFragment = resourceFragment
                 updateButtonUI(isJournalSelected = false)
             }

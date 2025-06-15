@@ -75,8 +75,12 @@ class JournalContentFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+        // PERUBAHAN DI SINI: Implementasi navigasi saat item diklik
         adapter = JournalAdapter(journalList) { entry, _ ->
-            // Navigasi ke detail
+            // Membuat aksi navigasi dengan membawa data 'entry'
+            val action = JournalFragmentDirections.actionJournalFragmentToDetailJournalFragment(entry)
+            // Menjalankan navigasi. Menggunakan findNavController dari parent (JournalFragment)
+            findNavController().navigate(action)
         }
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
@@ -97,11 +101,9 @@ class JournalContentFragment : Fragment() {
             return
         }
 
-        // <-- PERUBAHAN UTAMA ADA DI SINI -->
-        // Query ke koleksi 'journals' dan filter dengan whereEqualTo
         val query = db.collection("journals")
-            .whereEqualTo("userId", userId) // Filter berdasarkan ID pengguna yang login
-            .orderBy("timestamp", Query.Direction.DESCENDING) // Urutkan dari yang terbaru
+            .whereEqualTo("userId", userId)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
 
         firestoreListener = query.addSnapshotListener { snapshot, error ->
             if (error != null) {
@@ -123,7 +125,6 @@ class JournalContentFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Wajib: Hentikan listener saat fragment dihancurkan untuk mencegah memory leak
         firestoreListener?.remove()
     }
 
@@ -159,7 +160,6 @@ class JournalContentFragment : Fragment() {
         }.toString()
         statPhotos.text = journalList.count { it.imageUrl.isNotEmpty() }.toString()
 
-        // Logika "On This Day" (tidak berubah)
         val currentMonthDay = SimpleDateFormat("dd-MM", Locale("id", "ID")).format(calendar.time)
         val memoryEntry = journalList.find { entry ->
             try {

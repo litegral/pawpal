@@ -77,6 +77,8 @@
     </fragment>
 
 
+    <!--    Akbar Workspace End-->
+
     <!-- dhika here -->
     <fragment
         android:id="@+id/journalFragment"
@@ -86,6 +88,12 @@
         <action
             android:id="@+id/action_journalFragment_to_addJournalFragment"
             app:destination="@id/addJournalFragment" />
+        <action
+            android:id="@+id/action_journalFragment_to_detailJournalFragment"
+            app:destination="@id/detailJournalFragment" />
+        <action
+            android:id="@+id/action_journalFragment_to_addResourceFragment"
+            app:destination="@id/addResourceFragment" />
     </fragment>
 
     <fragment
@@ -108,12 +116,31 @@
             android:defaultValue="-1" />
     </fragment>
 
+    <fragment
+        android:id="@+id/detailJournalFragment"
+        android:name="com.litegral.pawpal.dhika.DetailJournalFragment"
+        android:label="Detail Jurnal"
+        tools:layout="@layout/activity_detail_journal">
+        <argument
+            android:name="journalEntry"
+            app:argType="com.litegral.pawpal.dhika.JournalEntry" />
+        <action
+            android:id="@+id/action_detailJournalFragment_to_addJournalFragment"
+            app:destination="@id/addJournalFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addResourceFragment"
+        android:name="com.litegral.pawpal.dhika.AddResourceFragment"
+        android:label="Resource Baru"
+        tools:layout="@layout/activity_add_resource" />
+
 
     <!-- dhika here -->
 
 
 
-<!--    Akbar Workspace End-->
+
 
 
     <fragment
