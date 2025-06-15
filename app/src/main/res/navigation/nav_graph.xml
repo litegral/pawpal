@@ -107,6 +107,104 @@
             app:argType="string" />
     </fragment>
 
+
+    <!--    Akbar Workspace End-->
+
+    <!-- dhika here -->
+    <fragment
+        android:id="@+id/journalFragment"
+        android:name="com.litegral.pawpal.JournalFragment"
+        android:label="Journal"
+        tools:layout="@layout/fragment_journal">
+        <action
+            android:id="@+id/action_journalFragment_to_addJournalFragment"
+            app:destination="@id/addJournalFragment" />
+        <action
+            android:id="@+id/action_journalFragment_to_detailJournalFragment"
+            app:destination="@id/detailJournalFragment" />
+        <action
+            android:id="@+id/action_journalFragment_to_addResourceFragment"
+            app:destination="@id/addResourceFragment" />
+        <action
+            android:id="@+id/action_journalFragment_to_detailResourceFragment"
+            app:destination="@id/detailResourceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addJournalFragment"
+        android:name="com.litegral.pawpal.dhika.AddJournalFragment"
+        android:label="New Journal Entry"
+        tools:layout="@layout/activity_add_journal">
+        <argument
+            android:name="journalEntry"
+            app:argType="com.litegral.pawpal.dhika.JournalEntry"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="isUpdate"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailJournalFragment"
+        android:name="com.litegral.pawpal.dhika.DetailJournalFragment"
+        android:label="Detail Jurnal"
+        tools:layout="@layout/activity_detail_journal">
+        <argument
+            android:name="journalEntry"
+            app:argType="com.litegral.pawpal.dhika.JournalEntry" />
+        <action
+            android:id="@+id/action_detailJournalFragment_to_addJournalFragment"
+            app:destination="@id/addJournalFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addResourceFragment"
+        android:name="com.litegral.pawpal.dhika.AddResourceFragment"
+        android:label="New Resource Entry"
+        tools:layout="@layout/activity_add_resource" >
+        <argument
+            android:name="resourceEntry"
+            app:argType="com.litegral.pawpal.dhika.ResourceEntry"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="isUpdate"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailResourceFragment"
+        android:name="com.litegral.pawpal.dhika.DetailResourceFragment"
+        android:label="Resource Detail"
+        tools:layout="@layout/activity_detail_resource">
+        <argument
+            android:name="resourceEntry"
+            app:argType="com.litegral.pawpal.dhika.ResourceEntry" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_detailResourceFragment_to_addResourceFragment"
+            app:destination="@id/addResourceFragment" />
+    </fragment>
+
+    <!-- dhika here -->
+
+
+
+
     <fragment
         android:id="@+id/requestListFragment"
         android:name="com.litegral.pawpal.akbar.fitur_adoption.RequestListFragment"

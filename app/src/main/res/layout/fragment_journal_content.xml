@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_journal_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="16dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_journal_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/paw_background"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/dashboard_greeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2F3A60"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Selamat Pagi!" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/stat_total" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp" android:textStyle="bold" android:textColor="#2F3A60" tools:text="15"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textColor="#6B728E" android:text="Total Jurnal"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/stat_monthly" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp" android:textStyle="bold" android:textColor="#2F3A60" tools:text="4"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textColor="#6B728E" android:text="Bulan Ini"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/stat_photos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp" android:textStyle="bold" android:textColor="#2F3A60" tools:text="8"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textColor="#6B728E" android:text="Dengan Foto"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider_memory"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BFC9F8"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <LinearLayout
+                android:id="@+id/memory_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kenangan pada tanggal ini..."
+                    android:textSize="12sp"
+                    android:textColor="#6B728E"/>
+                <TextView
+                    android:id="@+id/memory_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="#2F3A60"
+                    android:textStyle="bold"
+                    tools:text="“Pertama kali adopsi Miko!”"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_journal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="end"
+        android:text="＋ Add journal"
+        android:background="@drawable/tab_unselected"
+        android:textColor="#2F3A60"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_journal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/empty_state_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="24dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/kucing_jalan"
+            android:layout_width="wrap_content"
+            android:layout_height="81dp"
+            android:layout_marginTop="16dp"
+            app:srcCompat="@drawable/ic_cat_walk" />
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oh no! Kamu belum memasukkan journal."
+            android:textAlignment="center"
+            android:textColor="#2F3A60"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>
