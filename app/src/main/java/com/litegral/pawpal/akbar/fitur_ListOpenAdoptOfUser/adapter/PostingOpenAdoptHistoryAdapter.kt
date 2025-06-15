@@ -5,22 +5,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.litegral.pawpal.R
 import com.litegral.pawpal.akbar.model.CatModel
 
 class PostingOpenAdoptHistoryAdapter(
     private val postList: List<CatModel>,
-    private val onItemClicked: (CatModel) -> Unit
+    private val onEditClicked: (CatModel) -> Unit,
+    private val onViewRequestsClicked: (CatModel) -> Unit
 ) : RecyclerView.Adapter<PostingOpenAdoptHistoryAdapter.HistoryViewHolder>() {
 
     class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val petName: TextView = view.findViewById(R.id.textView_history_pet_name)
-        private val petSubtitle: TextView = view.findViewById(R.id.textView_history_pet_subtitle)
+        private val editClickArea: View = view.findViewById(R.id.edit_click_area)
+        private val viewRequestsButton: MaterialButton = view.findViewById(R.id.button_view_requests)
 
-        fun bind(cat: CatModel, onItemClicked: (CatModel) -> Unit) {
+        fun bind(
+            cat: CatModel,
+            onEditClicked: (CatModel) -> Unit,
+            onViewRequestsClicked: (CatModel) -> Unit
+        ) {
             petName.text = cat.name
-            petSubtitle.text = itemView.context.getString(R.string.click_to_edit)
-            itemView.setOnClickListener { onItemClicked(cat) }
+            // Handle click to edit the post
+            editClickArea.setOnClickListener { onEditClicked(cat) }
+            // Handle click to view requests
+            viewRequestsButton.setOnClickListener { onViewRequestsClicked(cat) }
         }
     }
 
@@ -31,7 +40,7 @@ class PostingOpenAdoptHistoryAdapter(
     }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        holder.bind(postList[position], onItemClicked)
+        holder.bind(postList[position], onEditClicked, onViewRequestsClicked)
     }
 
     override fun getItemCount(): Int = postList.size

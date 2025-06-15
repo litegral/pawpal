@@ -9,4 +9,8 @@
     <color name="light_border">#707070</color>
     <color name="lighter_border">#c8c8c8</color>
     <color name="card_bg">#d6d9e1</color>
+
+    <color name="status_pending">#FFFFB74D</color>
+    <color name="status_accepted">#FF66BB6A</color>
+    <color name="status_rejected">#FFE57373</color>
 </resources>

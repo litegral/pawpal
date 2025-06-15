@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         // Map fragment destinations to bottom navigation items
         val destinationToMenuItemMap = mapOf(
             R.id.homeFragment to R.id.homeFragment,
-            R.id.adoptionFragment to R.id.adoptionFragment,
+            R.id.catAdoptionHubFragment to R.id.catAdoptionHubFragment,
             R.id.journalFragment to R.id.journalFragment,
             R.id.matchFragment to R.id.matchFragment,
             R.id.swipeFragment to R.id.matchFragment // Map resultFragment to matchFragment
