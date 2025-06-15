@@ -5,7 +5,8 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
-<!--Akbar Workspace-->
+
+    <!--Akbar Workspace-->
     <!--WARNING : delete this code absolutely causing fatal error -->
     <fragment
         android:id="@+id/homeFragment"
@@ -23,18 +24,6 @@
             app:destination="@id/profileFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/postingOpenAdoptHistoryFragment"
-        android:name="com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser.PostingOpenAdoptHistoryFragment"
-        android:label="Riwayat Postingan"
-        tools:layout="@layout/fragment_posting_open_adopt_history" >
-        <action
-            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_updatePostFragment"
-            app:destination="@id/updatePostFragment" />
-        <action
-            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_createAdoptPostFragment"
-            app:destination="@id/createAdoptPostFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/updatePostFragment"
@@ -61,6 +50,48 @@
             android:defaultValue="@null" />
     </fragment>
 
+
+    <!--    Akbar Workspace End-->
+
+    <fragment
+        android:id="@+id/manageRequestFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_adoption.ManageRequestFragment"
+        android:label="Manage Requests"
+        tools:layout="@layout/fragment_manage_request">
+        <action
+            android:id="@+id/action_manageRequestFragment_to_requestListFragment"
+            app:destination="@id/requestListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/catAdoptionHubFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_adoption.CatAdoptionHubFragment"
+        android:label="Cat Adoption Hub"
+        tools:layout="@layout/fragment_cat_adoption_hub">
+        <action
+            android:id="@+id/action_catAdoptionHubFragment_to_trackRequestFragment"
+            app:destination="@id/trackRequestFragment" />
+        <action
+            android:id="@+id/action_catAdoptionHubFragment_to_manageRequestFragment"
+            app:destination="@id/manageRequestFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/submitRequestFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_adoption.SubmitRequestFragment"
+        android:label="Submit Adoption Request"
+        tools:layout="@layout/fragment_submit_request">
+        <argument
+            android:name="petId"
+            app:argType="string" />
+        <argument
+            android:name="requestId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+
     <fragment
         android:id="@+id/petDetailFragment"
         android:name="com.litegral.pawpal.akbar.fitur_petDetail.PetDetailFragment"
@@ -68,8 +99,8 @@
         tools:layout="@layout/fragment_pet_detail">
 
         <action
-            android:id="@+id/action_petDetailFragment_to_adoptionFormFragment"
-            app:destination="@id/adoptionFragment"/>
+            android:id="@+id/action_petDetailFragment_to_submitRequestFragment"
+            app:destination="@id/submitRequestFragment"/>
 
         <argument
             android:name="petId"
@@ -174,20 +205,55 @@
 
 
 
+    <fragment
+        android:id="@+id/requestListFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_adoption.RequestListFragment"
+        android:label="Adoption Requests"
+        tools:layout="@layout/fragment_request_list">
+        <argument
+            android:name="petId"
+            app:argType="string" />
+    </fragment>
 
 
     <fragment
-        android:id="@+id/adoptionFragment"
-        android:name="com.litegral.pawpal.AdoptionFragment" android:label="Adoption"
-        tools:layout="@layout/fragment_adoption"> <argument
-        android:name="petId"
-        app:argType="string"
-        app:nullable="true"
-        android:defaultValue="@null" />
+        android:id="@+id/postingOpenAdoptHistoryFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser.PostingOpenAdoptHistoryFragment"
+        android:label="Riwayat Postingan"
+        tools:layout="@layout/fragment_posting_open_adopt_history" >
+
+        <action
+            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_updatePostFragment"
+            app:destination="@id/updatePostFragment" />
+        <action
+            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_createAdoptPostFragment"
+            app:destination="@id/createAdoptPostFragment" />
+
+        <action
+            android:id="@+id/action_postingOpenAdoptHistoryFragment_to_requestListFragment"
+            app:destination="@id/requestListFragment">
+            <argument
+                android:name="petId"
+                app:argType="string" />
+        </action>
 
     </fragment>
 
 
+    <fragment
+        android:id="@+id/trackRequestFragment"
+        android:name="com.litegral.pawpal.akbar.fitur_adoption.TrackRequestFragment"
+        android:label="Track My Requests"
+        tools:layout="@layout/fragment_track_request">
+        <action
+            android:id="@+id/action_trackRequestFragment_to_submitRequestFragment"
+            app:destination="@id/submitRequestFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/journalFragment"
+        android:name="com.litegral.pawpal.JournalFragment"
+        android:label="Journal" />
 
     <fragment
         android:id="@+id/matchFragment"
@@ -229,6 +295,7 @@
         android:id="@+id/profileFragment"
         android:name="com.litegral.pawpal.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+    </fragment>
 
 </navigation>
