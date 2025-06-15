@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#D9E8FB" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Paw Pattern Overlay -->
+    <item>
+        <bitmap
+            android:src="@drawable/paw_pattern"
+            android:gravity="bottom|end" />
+    </item>
+</layer-list>
