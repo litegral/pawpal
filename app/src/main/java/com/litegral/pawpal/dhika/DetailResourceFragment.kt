@@ -1,3 +1,4 @@
+// app/src/main/java/com/litegral/pawpal/dhika/DetailResourceFragment.kt
 package com.litegral.pawpal.dhika
 
 import android.app.AlertDialog
@@ -13,12 +14,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs // Import navArgs
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth // Import FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore // Import FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage // Import FirebaseStorage
-import com.litegral.pawpal.JournalFragmentDirections
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.litegral.pawpal.R
 
 // Nama kelas sudah benar (DetailResourceFragment)
@@ -144,8 +146,12 @@ class DetailResourceFragment : Fragment() {
             .addOnSuccessListener {
                 setLoading(false)
                 Toast.makeText(requireContext(), "Resource deleted successfully!", Toast.LENGTH_SHORT).show()
+
+                // Kirim hasil ke JournalFragment untuk beralih tab
+                setFragmentResult("resourceOperationCompleted", bundleOf("switchToResourceTab" to true))
+
                 // Kembali ke halaman sebelumnya setelah berhasil dihapus
-                findNavController().popBackStack()
+                findNavController().popBackStack(R.id.journalFragment, false)
             }
             .addOnFailureListener { e ->
                 setLoading(false)
@@ -157,7 +163,7 @@ class DetailResourceFragment : Fragment() {
     private fun navigateToUpdateForm() {
         try {
             // Aksi navigasi ke AddResourceFragment dalam mode update
-            val action = JournalFragmentDirections.actionJournalFragmentToAddResourceFragment(
+            val action = DetailResourceFragmentDirections.actionDetailResourceFragmentToAddResourceFragment(
                 resourceEntry = currentResourceEntry, // Kirim objek resource yang ada
                 isUpdate = true, // Set flag isUpdate ke true
                 position = args.position // Kirim posisi (jika diperlukan untuk manajemen UI adapter)

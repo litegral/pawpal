@@ -46,7 +46,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/sample_cat"
                 android:background="#E0E4F1" />
 
         </androidx.cardview.widget.CardView>

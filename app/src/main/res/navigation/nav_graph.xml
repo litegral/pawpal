@@ -94,6 +94,9 @@
         <action
             android:id="@+id/action_journalFragment_to_addResourceFragment"
             app:destination="@id/addResourceFragment" />
+        <action
+            android:id="@+id/action_journalFragment_to_detailResourceFragment"
+            app:destination="@id/detailResourceFragment" />
     </fragment>
 
     <fragment
@@ -147,9 +150,6 @@
             android:name="position"
             app:argType="integer"
             android:defaultValue="-1" />
-        <action
-            android:id="@+id/action_addResourceFragment_to_detailResourceFragment"
-            app:destination="@id/detailResourceFragment" />
     </fragment>
 
     <fragment
@@ -164,6 +164,9 @@
             android:name="position"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_detailResourceFragment_to_addResourceFragment"
+            app:destination="@id/addResourceFragment" />
     </fragment>
 
     <!-- dhika here -->

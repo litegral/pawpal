@@ -1,3 +1,4 @@
+// app/src/main/java/com/litegral/pawpal/dhika/ResourceContentFragment.kt
 package com.litegral.pawpal.dhika
 
 import android.os.Bundle

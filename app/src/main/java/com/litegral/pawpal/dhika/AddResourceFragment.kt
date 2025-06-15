@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs // Import navArgs
-import androidx.navigation.fragment.findNavController // Import findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,18 +20,14 @@ import com.litegral.pawpal.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-// Nama kelas sudah benar (AddResourceFragment)
 class AddResourceFragment : Fragment() {
 
-    // Menggunakan Safe Args untuk mendapatkan argumen
     private val args: AddResourceFragmentArgs by navArgs()
 
-    // Firebase instances
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
-    // --- Deklarasi View ---
     private lateinit var imagePreview: ImageView
     private lateinit var btnSelectImage: Button
     private lateinit var uploadButton: Button
@@ -41,15 +37,12 @@ class AddResourceFragment : Fragment() {
     private lateinit var tagSpinner: Spinner
     private lateinit var headerTextView: TextView
 
-    // --- Variabel untuk data gambar ---
     private var imageUri: Uri? = null
-    private var existingImageUrl: String? = null // Untuk mode update, menyimpan URL gambar lama
+    private var existingImageUrl: String? = null
 
-    // Variabel untuk mode update
     private var isUpdateMode: Boolean = false
     private var resourceToUpdate: ResourceEntry? = null
 
-    // --- Launcher untuk memilih gambar dari galeri ---
     private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             imageUri = it
@@ -66,12 +59,10 @@ class AddResourceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
-        // --- Inisialisasi View dari layout ---
         val backButton = view.findViewById<ImageView>(R.id.backButton)
         headerTextView = view.findViewById(R.id.headerTextView)
         dateEditText = view.findViewById(R.id.dateEditText)
@@ -84,16 +75,14 @@ class AddResourceFragment : Fragment() {
         btnSelectImage = view.findViewById(R.id.uploadPhotoButton)
         btnSelectImage.text = "Select Image"
 
-        // --- Setup Spinner ---
         val hashtags = listOf("#Nutrition", "#Grooming", "#Health")
         val spinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, hashtags).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         tagSpinner.adapter = spinnerAdapter
 
-        // --- Logika untuk mode Update atau Add New ---
         isUpdateMode = args.isUpdate
-        resourceToUpdate = args.resourceEntry // resourceEntry akan null jika isUpdateMode false
+        resourceToUpdate = args.resourceEntry
 
         if (isUpdateMode && resourceToUpdate != null) {
             headerTextView.text = "UPDATE RESOURCE ENTRY"
@@ -106,7 +95,7 @@ class AddResourceFragment : Fragment() {
                 dateEditText.text = entry.date
                 titleEditText.setText(entry.title)
                 descriptionEditText.setText(entry.description)
-                existingImageUrl = entry.imageUrl // Simpan URL lama
+                existingImageUrl = entry.imageUrl
 
                 Glide.with(this)
                     .load(entry.imageUrl)
@@ -118,10 +107,8 @@ class AddResourceFragment : Fragment() {
             uploadButton.text = "Upload"
         }
 
-
-        // --- Event Listeners ---
         backButton.setOnClickListener {
-            findNavController().popBackStack() // Kembali menggunakan NavController
+            findNavController().popBackStack()
         }
 
         btnSelectImage.setOnClickListener {
@@ -143,17 +130,20 @@ class AddResourceFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            if (!isUpdateMode && imageUri == null) {
+                Toast.makeText(requireContext(), "Please select an image", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            setLoading(true)
+
             if (isUpdateMode) {
-                // Mode UPDATE
                 if (imageUri != null) {
-                    // Ada gambar baru, unggah dulu
                     uploadImageForUpdate(tag, date, title, desc, existingImageUrl)
                 } else {
-                    // Tidak ada gambar baru, langsung update dokumen
                     updateResourceInFirestore(tag, date, title, desc, existingImageUrl!!)
                 }
             } else {
-                // Mode ADD NEW
                 if (imageUri != null) {
                     uploadImageForNewEntry(tag, date, title, desc)
                 } else {
@@ -174,7 +164,7 @@ class AddResourceFragment : Fragment() {
             { _, selectedYear, selectedMonth, selectedDay ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(selectedYear, selectedMonth, selectedDay)
-                val dateFormat = SimpleDateFormat("dd MMMMuseppe", Locale("id", "ID"))
+                val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID")) // Corrected format to include year
                 dateEditText.text = dateFormat.format(selectedDate.time)
             },
             year,
@@ -184,7 +174,6 @@ class AddResourceFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    // Fungsi untuk mengunggah gambar untuk entri baru
     private fun uploadImageForNewEntry(tag: String, date: String, title: String, desc: String) {
         setLoading(true)
         val fileName = "resource_${System.currentTimeMillis()}.jpg"
@@ -209,7 +198,6 @@ class AddResourceFragment : Fragment() {
             }
     }
 
-    // Fungsi untuk mengunggah gambar untuk update (jika gambar berubah)
     private fun uploadImageForUpdate(tag: String, date: String, title: String, desc: String, oldImageUrl: String?) {
         setLoading(true)
         val fileName = "resource_${System.currentTimeMillis()}.jpg"
@@ -219,7 +207,6 @@ class AddResourceFragment : Fragment() {
             .addOnSuccessListener {
                 storageRef.downloadUrl.addOnSuccessListener { uri ->
                     val newImageUrl = uri.toString()
-                    // Hapus gambar lama jika ada dan berbeda
                     if (oldImageUrl != null && oldImageUrl.isNotBlank() && oldImageUrl != newImageUrl) {
                         storage.getReferenceFromUrl(oldImageUrl).delete()
                             .addOnSuccessListener {
@@ -228,7 +215,6 @@ class AddResourceFragment : Fragment() {
                             }
                             .addOnFailureListener { e ->
                                 Log.e("AddResourceFragment", "Failed to delete old image: ${e.message}", e)
-                                // Tetap lanjutkan update dokumen meskipun gagal hapus gambar lama
                                 updateResourceInFirestore(tag, date, title, desc, newImageUrl)
                             }
                     } else {
@@ -243,7 +229,6 @@ class AddResourceFragment : Fragment() {
             }
     }
 
-    // Fungsi untuk menyimpan ResourceEntry baru ke Firestore
     private fun saveResourceToFirestore(tag: String, date: String, title: String, desc: String, imageUrl: String) {
         val userId = auth.currentUser?.uid
         if (userId == null) {
@@ -268,7 +253,7 @@ class AddResourceFragment : Fragment() {
                 setLoading(false)
                 Toast.makeText(requireContext(), "Resource added successfully!", Toast.LENGTH_SHORT).show()
                 Log.d("AddResourceFragment", "DocumentSnapshot added with ID: ${documentReference.id}")
-                findNavController().popBackStack() // Kembali ke fragment sebelumnya
+                findNavController().popBackStack()
             }
             .addOnFailureListener { e ->
                 setLoading(false)
@@ -277,7 +262,6 @@ class AddResourceFragment : Fragment() {
             }
     }
 
-    // Fungsi untuk mengupdate ResourceEntry yang sudah ada di Firestore
     private fun updateResourceInFirestore(tag: String, date: String, title: String, desc: String, imageUrl: String) {
         val resourceId = resourceToUpdate?.id
         if (resourceId == null) {
@@ -300,8 +284,14 @@ class AddResourceFragment : Fragment() {
             .addOnSuccessListener {
                 setLoading(false)
                 Toast.makeText(requireContext(), "Resource updated successfully!", Toast.LENGTH_SHORT).show()
-                // Kembali ke DetailResourceFragment setelah update
-                findNavController().popBackStack()
+                // BARIS PERUBAHAN DI SINI:
+                // Pop back to journalFragment (parent dari ResourceContentFragment)
+                // dan pastikan ResourceContentFragment juga muncul di atasnya
+                findNavController().popBackStack(R.id.journalFragment, false) // popUpTo journalFragment
+                // Kemudian navigasi ke ResourceContentFragment, yang akan ditampilkan di dalam JournalFragment
+                // Perhatikan: ini akan membuat ResourceContentFragment menjadi fragment aktif di dalam JournalFragment
+                // tanpa memulai JournalFragment dari awal jika sudah ada di back stack.
+                // findNavController().navigate(R.id.resourceContentFragment) // TIDAK BISA LANGSUNG KE FRAGMENT CHILD
             }
             .addOnFailureListener { e ->
                 setLoading(false)
@@ -313,7 +303,5 @@ class AddResourceFragment : Fragment() {
     private fun setLoading(isLoading: Boolean) {
         uploadButton.isEnabled = !isLoading
         btnSelectImage.isEnabled = !isLoading
-        // Tambahkan ProgressBar jika ada di layout
-        // progressBar.isVisible = isLoading
     }
 }

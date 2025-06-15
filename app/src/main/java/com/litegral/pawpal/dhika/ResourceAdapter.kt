@@ -1,3 +1,4 @@
+// app/src/main/java/com/litegral/pawpal/dhika/ResourceAdapter.kt
 package com.litegral.pawpal.dhika
 
 import android.view.LayoutInflater
@@ -6,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide // <-- Tambahkan import Glide
+import com.bumptech.glide.Glide
 import com.litegral.pawpal.R
 
 class ResourceAdapter(

@@ -36,8 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:background="#E0E4F1"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/sample_cat" />
+                android:scaleType="centerCrop"/>
 
         </androidx.cardview.widget.CardView>
 
