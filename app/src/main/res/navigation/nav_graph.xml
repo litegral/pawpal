@@ -132,9 +132,39 @@
     <fragment
         android:id="@+id/addResourceFragment"
         android:name="com.litegral.pawpal.dhika.AddResourceFragment"
-        android:label="Resource Baru"
-        tools:layout="@layout/activity_add_resource" />
+        android:label="New Resource Entry"
+        tools:layout="@layout/activity_add_resource" >
+        <argument
+            android:name="resourceEntry"
+            app:argType="com.litegral.pawpal.dhika.ResourceEntry"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="isUpdate"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_addResourceFragment_to_detailResourceFragment"
+            app:destination="@id/detailResourceFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/detailResourceFragment"
+        android:name="com.litegral.pawpal.dhika.DetailResourceFragment"
+        android:label="Resource Detail"
+        tools:layout="@layout/activity_detail_resource">
+        <argument
+            android:name="resourceEntry"
+            app:argType="com.litegral.pawpal.dhika.ResourceEntry" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 
     <!-- dhika here -->
 
