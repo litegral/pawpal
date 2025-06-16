@@ -37,6 +37,7 @@ class CreateAdoptPostFragment : Fragment() {
 
     private val args: CreateAdoptPostFragmentArgs by navArgs()
     private var isEditMode = false
+    private val MAX_DOCUMENTS = 2
 
     // Firebase instances
     private lateinit var auth: FirebaseAuth
@@ -75,8 +76,19 @@ class CreateAdoptPostFragment : Fragment() {
     private val pickDocumentsLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
             if (uris.isNotEmpty()) {
-                selectedDocumentUris.addAll(uris)
+                val currentDocCount = existingImageUrls.drop(1).size + selectedDocumentUris.size
+                val slotsAvailable = MAX_DOCUMENTS - currentDocCount
+
+                if (uris.size > slotsAvailable) {
+                    Toast.makeText(context, "Batas maksimal $MAX_DOCUMENTS dokumen. Hanya $slotsAvailable file pertama yang ditambahkan.", Toast.LENGTH_LONG).show()
+                }
+
+                // Hanya ambil file sebanyak slot yang tersedia
+                val urisToAdd = uris.take(slotsAvailable)
+                selectedDocumentUris.addAll(urisToAdd)
+
                 updateSelectedDocumentsUI()
+                updateUploadButtonState() // Perbarui status tombol setelah memilih
             }
         }
 
@@ -137,6 +149,7 @@ class CreateAdoptPostFragment : Fragment() {
     private fun setupClickListeners() {
         buttonBackForm.setOnClickListener { findNavController().popBackStack() }
         imageViewProfilePhotoPreview.setOnClickListener { pickProfilePhotoLauncher.launch("image/*") }
+        // Listener tombol dokumen sekarang memanggil launcher yang sudah "pintar"
         buttonUploadDocument.setOnClickListener { pickDocumentsLauncher.launch("image/*") }
         buttonSubmitAdoptPost.setOnClickListener { submitForm() }
     }
@@ -158,14 +171,12 @@ class CreateAdoptPostFragment : Fragment() {
                         editTextBreed.setText(petToEdit.breed)
                         editTextDescription.setText(petToEdit.description)
                         spinnerGender.setSelection(if (petToEdit.isFemale) 1 else 0)
-
-                        // Simpan dan tampilkan gambar yang sudah ada
                         existingImageUrls.addAll(petToEdit.imageUrls)
                         if (existingImageUrls.isNotEmpty()) {
                             Glide.with(this).load(existingImageUrls[0]).into(imageViewProfilePhotoPreview)
-                            imageViewProfilePhotoPreview.setPadding(0, 0, 0, 0)
                         }
                         updateSelectedDocumentsUI()
+                        updateUploadButtonState()
                     }
                 }
                 setLoading(false)
@@ -179,6 +190,7 @@ class CreateAdoptPostFragment : Fragment() {
     private fun setupCreateMode() {
         textViewFormTitle.text = "Open Adopt Form"
         buttonSubmitAdoptPost.text = "Upload Postingan"
+        updateUploadButtonState()
     }
 
     private fun submitForm() {
@@ -285,6 +297,19 @@ class CreateAdoptPostFragment : Fragment() {
             finalList.add(newUrls[it]!!)
         }
         return finalList
+    }
+    // --- FUNGSI BARU UNTUK MENGONTROL TOMBOL UPLOAD DOKUMEN ---
+    private fun updateUploadButtonState() {
+        // Hitung total dokumen (yang sudah ada + yang baru dipilih)
+        val totalDocumentCount = existingImageUrls.drop(1).size + selectedDocumentUris.size
+
+        if (totalDocumentCount >= MAX_DOCUMENTS) {
+            buttonUploadDocument.isEnabled = false // Nonaktifkan tombol
+            buttonUploadDocument.text = "Batas Dokumen Tercapai"
+        } else {
+            buttonUploadDocument.isEnabled = true // Aktifkan tombol
+            buttonUploadDocument.text = "Pilih Dokumen"
+        }
     }
 
     private fun createFirestoreDocument(name: String, age: String, isFemale: Boolean, breed: String, description: String, imageUrls: List<String>) {
