@@ -97,34 +97,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView_pet_breed_detail"
                 app:layout_constraintStart_toStartOf="@+id/textView_pet_breed_detail" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_owner_profile_detail"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                tools:src="@drawable/ic_profile_placeholder"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView_pet_name_detail" />
-
-            <TextView
-                android:id="@+id/textView_owner_name_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Akbar"
-                android:textColor="#333333"
-                android:textSize="12sp"
-                android:layout_marginEnd="4dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageView_owner_profile_detail"
-                app:layout_constraintTop_toTopOf="@+id/imageView_owner_profile_detail" />
-
-            <TextView
-                android:id="@+id/textView_owner_label_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amber Owner"
-                android:textColor="#757575"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView_owner_name_detail"
-                app:layout_constraintTop_toBottomOf="@+id/textView_owner_name_detail" />
 
 
             <TextView

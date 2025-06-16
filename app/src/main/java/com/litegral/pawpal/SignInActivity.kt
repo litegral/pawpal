@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.auth.FirebaseAuthSettings
 
 class SignInActivity : AppCompatActivity() {
 
@@ -31,7 +30,7 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var signInButton: Button
     private lateinit var navigateToSignUpTextView: TextView
-    private lateinit var googleSignInButton: Button // Tombol untuk Google Sign-In
+    private lateinit var googleSignInButton: Button
 
     // Properti untuk Google Sign-In
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -41,21 +40,11 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_sign_in)
 
         auth = FirebaseAuth.getInstance()
-        
-        // Check if user is already signed in before setting up UI
-        if (auth.currentUser != null) {
-            // User is already signed in, go to main activity
-            navigateToMain()
-            return
-        }
-        
-        setContentView(R.layout.activity_sign_in)
-        
         db = FirebaseFirestore.getInstance()
 
-        // Panggil fungsi untuk mengonfigurasi Google Sign-In
         configureGoogleSignIn()
 
         // Inisialisasi Views
@@ -63,32 +52,32 @@ class SignInActivity : AppCompatActivity() {
         passwordEditText = findViewById(R.id.passwordEditText)
         signInButton = findViewById(R.id.button)
         navigateToSignUpTextView = findViewById(R.id.textView2)
-        googleSignInButton = findViewById(R.id.googleSignInButton) // Pastikan ID ini ada di XML
+        googleSignInButton = findViewById(R.id.googleSignInButton)
 
-        // Setup Listener untuk login email biasa
         signInButton.setOnClickListener { performEmailSignIn() }
 
-        // Setup Listener untuk teks "Don't have an account?"
         navigateToSignUpTextView.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
-        // Setup Listener untuk tombol Google Sign-In
+        // --- PERUBAHAN LOGIKA DI SINI ---
         googleSignInButton.setOnClickListener {
-            val signInIntent = googleSignInClient.signInIntent
-            googleSignInLauncher.launch(signInIntent)
+            // Selalu sign out dari Google terlebih dahulu untuk memaksa pemilihan akun
+            googleSignInClient.signOut().addOnCompleteListener {
+                // Setelah sign out selesai, baru mulai intent sign in yang baru
+                val signInIntent = googleSignInClient.signInIntent
+                googleSignInLauncher.launch(signInIntent)
+            }
         }
     }
 
     private fun configureGoogleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id)) // Wajib untuk integrasi Firebase
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // Launcher untuk menangani hasil dari pop-up Google Sign-In
         googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
@@ -113,12 +102,10 @@ class SignInActivity : AppCompatActivity() {
                     val isNewUser = task.result?.additionalUserInfo?.isNewUser ?: false
 
                     if (isNewUser && user != null) {
-                        // Jika ini pertama kali login via Google, simpan datanya ke Firestore
                         saveUserToFirestore(user)
                     } else {
                         Log.d(TAG, "Pengguna lama, login dengan Google berhasil.")
                     }
-                    // Langsung navigasi ke MainActivity
                     navigateToMain()
                 } else {
                     Toast.makeText(this, "Autentikasi Firebase dengan Google Gagal.", Toast.LENGTH_SHORT).show()
@@ -172,14 +159,5 @@ class SignInActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-    }
-    
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in and update UI accordingly
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            navigateToMain()
-        }
     }
 }

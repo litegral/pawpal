@@ -1,9 +1,10 @@
-// Semua file berada di dalam package 'akbar'
+// Pastikan file ini berada di package: com.litegral.pawpal.akbar
 package com.litegral.pawpal.akbar.fitur_createOpenAdopt
 
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,14 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.litegral.pawpal.R
@@ -32,17 +35,15 @@ import java.util.UUID
 
 class CreateAdoptPostFragment : Fragment() {
 
-    // Menerima argumen petId (bisa null) dari fragment sebelumnya
     private val args: CreateAdoptPostFragmentArgs by navArgs()
     private var isEditMode = false
-    private var petToEdit: CatModel? = null
 
     // Firebase instances
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
-    // Deklarasi View
+    // Views
     private lateinit var buttonBackForm: ImageButton
     private lateinit var textViewFormTitle: TextView
     private lateinit var editTextName: EditText
@@ -56,12 +57,12 @@ class CreateAdoptPostFragment : Fragment() {
     private lateinit var buttonSubmitAdoptPost: Button
     private lateinit var progressBar: ProgressBar
 
-    // Variabel untuk menyimpan URI file yang dipilih
+    // Data URI & URL
     private var selectedProfilePhotoUri: Uri? = null
     private var selectedDocumentUris: MutableList<Uri> = mutableListOf()
     private var existingImageUrls: MutableList<String> = mutableListOf()
 
-    // Launcher untuk memilih foto profil (satu file)
+    // Launcher untuk gambar
     private val pickProfilePhotoLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {
@@ -71,7 +72,6 @@ class CreateAdoptPostFragment : Fragment() {
             }
         }
 
-    // Launcher untuk memilih dokumen (bisa beberapa file)
     private val pickDocumentsLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
             if (uris.isNotEmpty()) {
@@ -79,7 +79,6 @@ class CreateAdoptPostFragment : Fragment() {
                 updateSelectedDocumentsUI()
             }
         }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,7 +90,6 @@ class CreateAdoptPostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
@@ -100,7 +98,6 @@ class CreateAdoptPostFragment : Fragment() {
         setupSpinner()
         setupClickListeners()
 
-        // Memeriksa apakah fragment dibuka dalam mode edit atau create
         val petIdFromArgs = args.petId
         if (petIdFromArgs != null) {
             isEditMode = true
@@ -126,6 +123,7 @@ class CreateAdoptPostFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar_form)
     }
 
+    // SETUP SPINNER
     private fun setupSpinner() {
         ArrayAdapter.createFromResource(
             requireContext(), R.array.gender_array, android.R.layout.simple_spinner_item
@@ -135,6 +133,7 @@ class CreateAdoptPostFragment : Fragment() {
         }
     }
 
+    //
     private fun setupClickListeners() {
         buttonBackForm.setOnClickListener { findNavController().popBackStack() }
         imageViewProfilePhotoPreview.setOnClickListener { pickProfilePhotoLauncher.launch("image/*") }
@@ -142,7 +141,7 @@ class CreateAdoptPostFragment : Fragment() {
         buttonSubmitAdoptPost.setOnClickListener { submitForm() }
     }
 
-    // Fungsi untuk mode EDIT: memuat data dari Firestore dan mengisi form
+    // --- FUNGSI INI SEKARANG MENGAMBIL DATA DARI FIREBASE DAN MENGISI FORM ---
     private fun loadPetDataForEdit(petId: String) {
         setLoading(true)
         textViewFormTitle.text = "Update Post"
@@ -151,16 +150,17 @@ class CreateAdoptPostFragment : Fragment() {
         db.collection("pets").document(petId).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    petToEdit = document.toObject(CatModel::class.java)
+                    val petToEdit = document.toObject(CatModel::class.java)
                     if (petToEdit != null) {
-                        // Isi form dengan data yang ada
-                        editTextName.setText(petToEdit!!.name)
-                        editTextAge.setText(petToEdit!!.age)
-                        editTextBreed.setText(petToEdit!!.breed)
-                        editTextDescription.setText(petToEdit!!.description)
-                        spinnerGender.setSelection(if (petToEdit!!.isFemale) 1 else 0) // Asumsi Male=0, Female=1
+                        // Isi semua form dengan data yang sudah ada
+                        editTextName.setText(petToEdit.name)
+                        editTextAge.setText(petToEdit.age)
+                        editTextBreed.setText(petToEdit.breed)
+                        editTextDescription.setText(petToEdit.description)
+                        spinnerGender.setSelection(if (petToEdit.isFemale) 1 else 0)
 
-                        existingImageUrls.addAll(petToEdit!!.imageUrls)
+                        // Simpan dan tampilkan gambar yang sudah ada
+                        existingImageUrls.addAll(petToEdit.imageUrls)
                         if (existingImageUrls.isNotEmpty()) {
                             Glide.with(this).load(existingImageUrls[0]).into(imageViewProfilePhotoPreview)
                             imageViewProfilePhotoPreview.setPadding(0, 0, 0, 0)
@@ -176,14 +176,13 @@ class CreateAdoptPostFragment : Fragment() {
             }
     }
 
-    // Fungsi untuk mode CREATE: memastikan form kosong
     private fun setupCreateMode() {
         textViewFormTitle.text = "Open Adopt Form"
         buttonSubmitAdoptPost.text = "Upload Postingan"
     }
 
-    // Fungsi utama yang dipanggil saat tombol submit ditekan
     private fun submitForm() {
+        setLoading(true)
         val name = editTextName.text.toString().trim()
         val age = editTextAge.text.toString().trim()
         val breed = editTextBreed.text.toString().trim()
@@ -192,97 +191,129 @@ class CreateAdoptPostFragment : Fragment() {
 
         if (name.isBlank() || age.isBlank()) {
             Toast.makeText(context, "Nama dan Umur wajib diisi.", Toast.LENGTH_SHORT).show()
+            setLoading(false)
             return
         }
-        setLoading(true)
 
         if (isEditMode) {
-            updatePostInFirestore(args.petId!!, name, age, isFemale, breed, description)
+            // Memanggil fungsi untuk handle logika update
+            handleUpdatePost(args.petId!!, name, age, isFemale, breed, description)
         } else {
+            // Memanggil fungsi untuk handle logika create
             if (selectedProfilePhotoUri == null) {
                 Toast.makeText(context, "Foto Profil wajib diisi.", Toast.LENGTH_SHORT).show()
                 setLoading(false)
                 return
             }
-            uploadAllImagesAndCreatePost(name, age, isFemale, breed, description)
+            uploadNewImagesAndSaveToFirestore(true, name, age, isFemale, breed, description, null)
         }
     }
 
-    // Mengunggah semua gambar (profil+dokumen) lalu menyimpan data ke Firestore
-    private fun uploadAllImagesAndCreatePost(name: String, age: String, isFemale: Boolean, breed: String, description: String) {
+    private fun handleUpdatePost(petId: String, name: String, age: String, isFemale: Boolean, breed: String, description: String) {
+        val newImagesToUpload = mutableListOf<Uri>()
+        selectedProfilePhotoUri?.let { newImagesToUpload.add(it) }
+        newImagesToUpload.addAll(selectedDocumentUris)
+
+        if (newImagesToUpload.isNotEmpty()) {
+            // Jika ada gambar baru yang dipilih, upload dulu
+            uploadNewImagesAndSaveToFirestore(false, name, age, isFemale, breed, description, petId)
+        } else {
+            // Jika tidak ada gambar baru, langsung update data teks
+            updateFirestoreDocument(petId, name, age, isFemale, breed, description, existingImageUrls)
+        }
+    }
+
+    private fun uploadNewImagesAndSaveToFirestore(isCreate: Boolean, name: String, age: String, isFemale: Boolean, breed: String, description: String, petId: String?) {
+        val uploaderId = auth.currentUser?.uid ?: return setLoading(false)
+
         val allUrisToUpload = mutableListOf<Uri>()
-        selectedProfilePhotoUri?.let { allUrisToUpload.add(it) } // Foto profil di urutan pertama
+        selectedProfilePhotoUri?.let { allUrisToUpload.add(it) }
         allUrisToUpload.addAll(selectedDocumentUris)
 
-        val uploadedUrls = mutableListOf<String>()
+        val newUploadedUrls = mutableMapOf<Uri, String>()
         var uploadCounter = 0
-        if (allUrisToUpload.isEmpty()) {
-            savePostToFirestore(name, age, isFemale, breed, description, listOf())
-            return
-        }
 
         allUrisToUpload.forEach { uri ->
-            val uploaderId = auth.currentUser?.uid ?: return@forEach
             val fileName = "${UUID.randomUUID()}.jpg"
             val imageRef = storage.reference.child("images/$uploaderId/$fileName")
+
             imageRef.putFile(uri)
                 .addOnSuccessListener {
                     imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                        // Simpan sementara URL yang didapat
-                        if (uri == selectedProfilePhotoUri) {
-                            uploadedUrls.add(0, downloadUrl.toString()) // Pastikan URL profil di indeks 0
-                        } else {
-                            uploadedUrls.add(downloadUrl.toString())
-                        }
-
+                        newUploadedUrls[uri] = downloadUrl.toString()
                         uploadCounter++
                         if (uploadCounter == allUrisToUpload.size) {
-                            savePostToFirestore(name, age, isFemale, breed, description, uploadedUrls)
+                            if (isCreate) {
+                                // Proses CREATE: urutkan URL dan simpan dokumen baru
+                                val finalUrls = sortUrls(newUploadedUrls)
+                                createFirestoreDocument(name, age, isFemale, breed, description, finalUrls)
+                            } else {
+                                // Proses UPDATE: gabungkan URL lama dan baru, lalu update dokumen
+                                val finalUrls = mergeUrls(existingImageUrls, newUploadedUrls)
+                                updateFirestoreDocument(petId!!, name, age, isFemale, breed, description, finalUrls)
+                            }
                         }
                     }
                 }
-                .addOnFailureListener { e ->
-                    setLoading(false); Toast.makeText(context, "Gagal unggah gambar: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+                .addOnFailureListener { e -> setLoading(false); Toast.makeText(context, "Gagal unggah: ${e.message}", Toast.LENGTH_SHORT).show() }
         }
     }
 
-    // Menyimpan dokumen postingan baru ke Firestore
-    private fun savePostToFirestore(name: String, age: String, isFemale: Boolean, breed: String, description: String, imageUrls: List<String>) {
+    private fun sortUrls(newUrls: Map<Uri, String>): List<String> {
+        val sortedList = mutableListOf<String>()
+        selectedProfilePhotoUri?.let {
+            sortedList.add(newUrls[it]!!)
+        }
+        selectedDocumentUris.forEach {
+            sortedList.add(newUrls[it]!!)
+        }
+        return sortedList
+    }
+
+    private fun mergeUrls(oldUrls: List<String>, newUrls: Map<Uri, String>): List<String> {
+        val finalList = oldUrls.toMutableList()
+        // Ganti foto profil jika ada yang baru
+        selectedProfilePhotoUri?.let {
+            // Hapus foto profil lama dari storage
+            if (oldUrls.isNotEmpty() && oldUrls[0].isNotBlank()) {
+                storage.getReferenceFromUrl(oldUrls[0]).delete()
+            }
+            finalList[0] = newUrls[it]!!
+        }
+        // Tambahkan URL dokumen baru
+        selectedDocumentUris.forEach {
+            finalList.add(newUrls[it]!!)
+        }
+        return finalList
+    }
+
+    private fun createFirestoreDocument(name: String, age: String, isFemale: Boolean, breed: String, description: String, imageUrls: List<String>) {
         val uploaderId = auth.currentUser?.uid ?: return
-        val petId = db.collection("pets").document().id
+        val newPetId = db.collection("pets").document().id
 
         val newPet = CatModel(
-            id = petId, uploaderUid = uploaderId,
-            uploaderName = auth.currentUser?.displayName ?: "Pengguna",
-            name = name, age = age, isFemale = isFemale,
-            breed = breed, description = description, imageUrls = imageUrls,
-            petPosition = "Bogor", // TODO: Sesuaikan
-            postedDate = null // Akan diisi oleh server
+            id = newPetId, uploaderUid = uploaderId, uploaderName = auth.currentUser?.displayName ?: "",
+            name = name, age = age, isFemale = isFemale, breed = breed, description = description,
+            imageUrls = imageUrls, petPosition = "Bogor"
         )
-
-        db.collection("pets").document(petId).set(newPet)
+        db.collection("pets").document(newPetId).set(newPet)
             .addOnSuccessListener {
-                Toast.makeText(context, "Postingan berhasil diunggah!", Toast.LENGTH_LONG).show()
-                parentFragmentManager.setFragmentResult("newPetPostRequest", Bundle().apply { putParcelable("newlyPostedPet", newPet) })
+                Toast.makeText(context, "Postingan berhasil diunggah!", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }
-            .addOnFailureListener { e -> Toast.makeText(context, "Gagal menyimpan postingan: ${e.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { e -> Toast.makeText(context, "Gagal menyimpan: ${e.message}", Toast.LENGTH_SHORT).show() }
             .addOnCompleteListener { setLoading(false) }
     }
 
-    // Mengupdate dokumen yang ada di Firestore (hanya data teks untuk saat ini)
-    private fun updatePostInFirestore(petId: String, name: String, age: String, isFemale: Boolean, breed: String, description: String) {
-        // TODO: Implementasi logika upload untuk gambar baru dan hapus gambar lama jika ada perubahan
+    private fun updateFirestoreDocument(petId: String, name: String, age: String, isFemale: Boolean, breed: String, description: String, imageUrls: List<String>) {
         val updatedData = mapOf(
             "name" to name, "age" to age, "isFemale" to isFemale,
-            "breed" to breed, "description" to description
+            "breed" to breed, "description" to description, "imageUrls" to imageUrls
         )
         db.collection("pets").document(petId).update(updatedData)
             .addOnSuccessListener {
                 Toast.makeText(context, "Postingan berhasil diperbarui!", Toast.LENGTH_SHORT).show()
-                // Kembali ke halaman riwayat
-                findNavController().popBackStack(R.id.postingOpenAdoptHistoryFragment, false)
+                findNavController().popBackStack()
             }
             .addOnFailureListener { e -> Toast.makeText(context, "Gagal memperbarui: ${e.message}", Toast.LENGTH_SHORT).show() }
             .addOnCompleteListener { setLoading(false) }
