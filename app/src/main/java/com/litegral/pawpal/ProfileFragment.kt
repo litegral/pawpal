@@ -37,6 +37,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var nameEditText: TextInputEditText
     private lateinit var saveProfileButton: MaterialButton
     private lateinit var logoutButton: MaterialButton // Tombol Logout
+    private lateinit var editCatProfileButton: MaterialButton
     private lateinit var progressBar: ProgressBar
 
     // Variabel untuk menyimpan URI gambar yang baru dipilih
@@ -76,6 +77,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         nameEditText = view.findViewById(R.id.nameEditText)
         saveProfileButton = view.findViewById(R.id.saveProfileButton)
         logoutButton = view.findViewById(R.id.button_logout_profile) // Pastikan ID ini ada di XML
+        editCatProfileButton = view.findViewById(R.id.editCatProfileButton)
         progressBar = view.findViewById(R.id.progressBar_profile) // Pastikan ID ini ada di XML
     }
 
@@ -94,6 +96,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         saveProfileButton.setOnClickListener {
             // Menyimpan perubahan profil ke Firebase
             saveProfileChanges()
+        }
+
+        editCatProfileButton.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_editCatProfileFragment)
         }
 
         logoutButton.setOnClickListener {
@@ -214,5 +220,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         progressBar.isVisible = isLoading
         saveProfileButton.isEnabled = !isLoading
         logoutButton.isEnabled = !isLoading
+        editCatProfileButton.isEnabled = !isLoading
     }
 }

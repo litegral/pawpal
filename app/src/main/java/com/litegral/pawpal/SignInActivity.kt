@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuthSettings
 
 class SignInActivity : AppCompatActivity() {
 
@@ -40,9 +41,18 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
 
         auth = FirebaseAuth.getInstance()
+        
+        // Check if user is already signed in before setting up UI
+        if (auth.currentUser != null) {
+            // User is already signed in, go to main activity
+            navigateToMain()
+            return
+        }
+        
+        setContentView(R.layout.activity_sign_in)
+        
         db = FirebaseFirestore.getInstance()
 
         // Panggil fungsi untuk mengonfigurasi Google Sign-In
@@ -162,5 +172,14 @@ class SignInActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+    
+    override fun onStart() {
+        super.onStart()
+        // Check if user is signed in and update UI accordingly
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            navigateToMain()
+        }
     }
 }

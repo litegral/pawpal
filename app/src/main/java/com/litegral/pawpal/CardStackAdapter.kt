@@ -22,6 +22,9 @@ class CardStackAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.name.text = item.name
+        holder.age.text = item.age
+        holder.breed.text = item.breed
+        holder.gender.text = item.gender
         holder.description.text = item.description
 
         // Load image using Glide
@@ -40,6 +43,9 @@ class CardStackAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.itemImage)
         val name: TextView = view.findViewById(R.id.itemName)
+        val age: TextView = view.findViewById(R.id.itemAge)
+        val breed: TextView = view.findViewById(R.id.itemBreed)
+        val gender: TextView = view.findViewById(R.id.itemGender)
         val description: TextView = view.findViewById(R.id.itemDescription)
     }
 }

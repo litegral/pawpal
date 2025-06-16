@@ -67,7 +67,7 @@
         android:id="@+id/catAdoptionHubFragment"
         android:name="com.litegral.pawpal.akbar.fitur_adoption.CatAdoptionHubFragment"
         android:label="Cat Adoption Hub"
-        tools:layout="@layout/fragment_cat_adoption_hub">
+        tools:layout="@layout/fragment_adoption">
         <action
             android:id="@+id/action_catAdoptionHubFragment_to_trackRequestFragment"
             app:destination="@id/trackRequestFragment" />
@@ -251,11 +251,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/journalFragment"
-        android:name="com.litegral.pawpal.JournalFragment"
-        android:label="Journal" />
-
-    <fragment
         android:id="@+id/matchFragment"
         android:name="com.litegral.pawpal.MatchFragment"
         android:label="Match">
@@ -263,6 +258,9 @@
         <action
             android:id="@+id/action_matchFragment_to_swipeFragment"
             app:destination="@id/swipeFragment" />
+        <action
+            android:id="@+id/action_matchFragment_to_editCatProfileFragment"
+            app:destination="@id/editCatProfileFragment" />
 
     </fragment>
 
@@ -281,6 +279,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/editCatProfileFragment"
+        android:name="com.litegral.pawpal.match.ui.EditCatProfileFragment"
+        android:label="Edit Cat Profile"
+        tools:layout="@layout/fragment_edit_cat_profile" />
+
+    <fragment
         android:id="@+id/historyFragment"
         android:name="com.litegral.pawpal.HistoryFragment"
         android:label="History">
@@ -296,6 +300,9 @@
         android:name="com.litegral.pawpal.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_editCatProfileFragment"
+            app:destination="@id/editCatProfileFragment" />
     </fragment>
 
 </navigation>

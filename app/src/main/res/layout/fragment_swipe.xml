@@ -57,6 +57,35 @@
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
     <LinearLayout
+        android:id="@+id/noCatsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/cardStackView"
+        app:layout_constraintBottom_toBottomOf="@id/cardStackView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/noCatsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No more pets available"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/refreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Refresh" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/buttonsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
