@@ -1,4 +1,3 @@
-// Pastikan file ini berada di package: com.litegral.pawpal.akbar
 package com.litegral.pawpal.akbar.fitur_createOpenAdopt
 
 import android.net.Uri
@@ -73,6 +72,7 @@ class CreateAdoptPostFragment : Fragment() {
             }
         }
 
+    // Logika untuk atur agar user hanya dapat upload 2 gambar document
     private val pickDocumentsLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
             if (uris.isNotEmpty()) {
@@ -83,14 +83,15 @@ class CreateAdoptPostFragment : Fragment() {
                     Toast.makeText(context, "Batas maksimal $MAX_DOCUMENTS dokumen. Hanya $slotsAvailable file pertama yang ditambahkan.", Toast.LENGTH_LONG).show()
                 }
 
-                // Hanya ambil file sebanyak slot yang tersedia
+
                 val urisToAdd = uris.take(slotsAvailable)
                 selectedDocumentUris.addAll(urisToAdd)
 
                 updateSelectedDocumentsUI()
-                updateUploadButtonState() // Perbarui status tombol setelah memilih
+                updateUploadButtonState()
             }
         }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,6 +100,7 @@ class CreateAdoptPostFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_create_adopt_post, container, false)
     }
 
+    // inisialiasi apakah mode update atau create
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -145,16 +147,15 @@ class CreateAdoptPostFragment : Fragment() {
         }
     }
 
-    //
+    // UI Handle
     private fun setupClickListeners() {
         buttonBackForm.setOnClickListener { findNavController().popBackStack() }
         imageViewProfilePhotoPreview.setOnClickListener { pickProfilePhotoLauncher.launch("image/*") }
-        // Listener tombol dokumen sekarang memanggil launcher yang sudah "pintar"
         buttonUploadDocument.setOnClickListener { pickDocumentsLauncher.launch("image/*") }
         buttonSubmitAdoptPost.setOnClickListener { submitForm() }
     }
 
-    // --- FUNGSI INI SEKARANG MENGAMBIL DATA DARI FIREBASE DAN MENGISI FORM ---
+    // FUNCTION UNTUK MENAMPILKAN DATA PET SEBELUMNYA UNTUK NANTINYA DI EDIT
     private fun loadPetDataForEdit(petId: String) {
         setLoading(true)
         textViewFormTitle.text = "Update Post"
@@ -165,7 +166,6 @@ class CreateAdoptPostFragment : Fragment() {
                 if (document != null && document.exists()) {
                     val petToEdit = document.toObject(CatModel::class.java)
                     if (petToEdit != null) {
-                        // Isi semua form dengan data yang sudah ada
                         editTextName.setText(petToEdit.name)
                         editTextAge.setText(petToEdit.age)
                         editTextBreed.setText(petToEdit.breed)
@@ -207,11 +207,12 @@ class CreateAdoptPostFragment : Fragment() {
             return
         }
 
+        // LOGIC MODE
         if (isEditMode) {
-            // Memanggil fungsi untuk handle logika update
+            // JIKA EDIT MODE
             handleUpdatePost(args.petId!!, name, age, isFemale, breed, description)
         } else {
-            // Memanggil fungsi untuk handle logika create
+            // JIKA CREATE MODE
             if (selectedProfilePhotoUri == null) {
                 Toast.makeText(context, "Foto Profil wajib diisi.", Toast.LENGTH_SHORT).show()
                 setLoading(false)
@@ -227,14 +228,15 @@ class CreateAdoptPostFragment : Fragment() {
         newImagesToUpload.addAll(selectedDocumentUris)
 
         if (newImagesToUpload.isNotEmpty()) {
-            // Jika ada gambar baru yang dipilih, upload dulu
+            // NEW IMAGE MAKA UPLOAD
             uploadNewImagesAndSaveToFirestore(false, name, age, isFemale, breed, description, petId)
         } else {
-            // Jika tidak ada gambar baru, langsung update data teks
+            // NO NEW IMAGE UPLOAD YANG BERHUBUNGAN DENGAN TULISAN
             updateFirestoreDocument(petId, name, age, isFemale, breed, description, existingImageUrls)
         }
     }
 
+    // FUNCTION UNTUK UPLOAD IMAGE BARU DAN DI UPDATE DATANYA
     private fun uploadNewImagesAndSaveToFirestore(isCreate: Boolean, name: String, age: String, isFemale: Boolean, breed: String, description: String, petId: String?) {
         val uploaderId = auth.currentUser?.uid ?: return setLoading(false)
 
@@ -271,6 +273,7 @@ class CreateAdoptPostFragment : Fragment() {
         }
     }
 
+    // SORT URL AGAR YANG DI LETAKKAN ADALAH GAMBAR PROFILE TERLEBIH DAHULU
     private fun sortUrls(newUrls: Map<Uri, String>): List<String> {
         val sortedList = mutableListOf<String>()
         selectedProfilePhotoUri?.let {
@@ -298,7 +301,7 @@ class CreateAdoptPostFragment : Fragment() {
         }
         return finalList
     }
-    // --- FUNGSI BARU UNTUK MENGONTROL TOMBOL UPLOAD DOKUMEN ---
+    // FUNGSI UNTUK MENGONTROL TOMBOL UPLOAD DOKUMEN
     private fun updateUploadButtonState() {
         // Hitung total dokumen (yang sudah ada + yang baru dipilih)
         val totalDocumentCount = existingImageUrls.drop(1).size + selectedDocumentUris.size
@@ -312,6 +315,7 @@ class CreateAdoptPostFragment : Fragment() {
         }
     }
 
+    // FUNCTION UNTUK MEMBUAT DOCUMENT BARU DI FIRESTORE
     private fun createFirestoreDocument(name: String, age: String, isFemale: Boolean, breed: String, description: String, imageUrls: List<String>) {
         val uploaderId = auth.currentUser?.uid ?: return
         val newPetId = db.collection("pets").document().id
@@ -330,6 +334,7 @@ class CreateAdoptPostFragment : Fragment() {
             .addOnCompleteListener { setLoading(false) }
     }
 
+    // FUNCTION UPDATE DOCUMENT
     private fun updateFirestoreDocument(petId: String, name: String, age: String, isFemale: Boolean, breed: String, description: String, imageUrls: List<String>) {
         val updatedData = mapOf(
             "name" to name, "age" to age, "isFemale" to isFemale,
@@ -344,12 +349,13 @@ class CreateAdoptPostFragment : Fragment() {
             .addOnCompleteListener { setLoading(false) }
     }
 
+    // FUNCTION LOADING
     private fun setLoading(isLoading: Boolean) {
         progressBar.isVisible = isLoading
         buttonSubmitAdoptPost.isEnabled = !isLoading
     }
 
-    // Fungsi-fungsi helper untuk UI dokumen
+    // FUCNTIO HELPER
     private fun updateSelectedDocumentsUI() {
         layoutSelectedDocuments.removeAllViews()
         existingImageUrls.drop(1).forEach { url ->

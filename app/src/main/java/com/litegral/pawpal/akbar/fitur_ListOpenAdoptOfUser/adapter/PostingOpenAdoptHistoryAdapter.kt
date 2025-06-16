@@ -15,6 +15,7 @@ class PostingOpenAdoptHistoryAdapter(
     private val onViewRequestsClicked: (CatModel) -> Unit
 ) : RecyclerView.Adapter<PostingOpenAdoptHistoryAdapter.HistoryViewHolder>() {
 
+    // FUNCTION UNTUK UPDATE VIEWHOLDER DENGAN DATA BARU
     class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val petName: TextView = view.findViewById(R.id.textView_history_pet_name)
         private val editClickArea: View = view.findViewById(R.id.edit_click_area)
@@ -26,9 +27,9 @@ class PostingOpenAdoptHistoryAdapter(
             onViewRequestsClicked: (CatModel) -> Unit
         ) {
             petName.text = cat.name
-            // Handle click to edit the post
+
             editClickArea.setOnClickListener { onEditClicked(cat) }
-            // Handle click to view requests
+
             viewRequestsButton.setOnClickListener { onViewRequestsClicked(cat) }
         }
     }

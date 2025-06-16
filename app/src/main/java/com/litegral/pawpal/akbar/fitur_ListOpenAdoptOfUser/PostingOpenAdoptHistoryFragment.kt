@@ -37,23 +37,23 @@ class PostingOpenAdoptHistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate layout untuk fragment ini
+
         return inflater.inflate(R.layout.fragment_posting_open_adopt_history, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi Firebase
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Inisialisasi Views
+
         initViews(view)
         setupRecyclerView()
         setupClickListeners()
 
-        // Muat data dari Firestore
+        // LOAD DATA FIREBASE
         loadUserPosts()
     }
 
@@ -61,14 +61,14 @@ class PostingOpenAdoptHistoryFragment : Fragment() {
         recyclerViewHistory = view.findViewById(R.id.recyclerView_posting_history)
         fabAddFromHistory = view.findViewById(R.id.fab_add_from_history)
         buttonBackHistory = view.findViewById(R.id.button_back_history)
-        progressBar = view.findViewById(R.id.progressBar_history) // Pastikan ID ini ada di XML
+        progressBar = view.findViewById(R.id.progressBar_history)
     }
 
     private fun setupRecyclerView() {
         historyAdapter = PostingOpenAdoptHistoryAdapter(
             postList,
             onEditClicked = { selectedPost ->
-                // This is the original logic for editing a post
+                // EDIT LOGIC
                 if (selectedPost.id.isNotBlank()) {
                     val action = PostingOpenAdoptHistoryFragmentDirections.actionPostingOpenAdoptHistoryFragmentToUpdatePostFragment(selectedPost.id)
                     findNavController().navigate(action)
@@ -77,9 +77,7 @@ class PostingOpenAdoptHistoryFragment : Fragment() {
                 }
             },
             onViewRequestsClicked = { selectedPost ->
-                // NEW: Navigate to the list of requests for this specific pet
                 if (selectedPost.id.isNotBlank()) {
-                    // We will create this navigation action in the next step
                     val action = PostingOpenAdoptHistoryFragmentDirections.actionPostingOpenAdoptHistoryFragmentToRequestListFragment(selectedPost.id)
                     findNavController().navigate(action)
                 } else {
@@ -91,18 +89,20 @@ class PostingOpenAdoptHistoryFragment : Fragment() {
         recyclerViewHistory.adapter = historyAdapter
     }
 
+    // HANDLE UI
     private fun setupClickListeners() {
         buttonBackHistory.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        //LOGIC UNTUK NAVIGASI KE HALAMAN CREATE ADOPT POST UNTUK TOMBOL HIJAU
         fabAddFromHistory.setOnClickListener {
-            // Navigasi ke halaman form untuk membuat postingan baru
             findNavController().navigate(R.id.action_postingOpenAdoptHistoryFragment_to_createAdoptPostFragment)
         }
     }
 
     private fun loadUserPosts() {
-        progressBar.isVisible = true // Tampilkan loading
+        progressBar.isVisible = true
         val currentUserId = auth.currentUser?.uid
         if (currentUserId == null) {
             Toast.makeText(context, "Anda harus login untuk melihat riwayat.", Toast.LENGTH_SHORT).show()
@@ -113,27 +113,25 @@ class PostingOpenAdoptHistoryFragment : Fragment() {
         // Ambil semua dokumen dari koleksi 'pets' yang field 'uploaderUid'-nya sama dengan ID pengguna saat ini
         db.collection("pets")
             .whereEqualTo("uploaderUid", currentUserId)
-            .orderBy("postedDate", Query.Direction.DESCENDING) // Urutkan dari yang terbaru
+            .orderBy("postedDate", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { documents ->
                 postList.clear()
                 for (document in documents) {
                     // Mengubah dokumen menjadi objek CatModel
                     val cat = document.toObject(CatModel::class.java)
-                    // Set ID objek `cat` dari ID dokumen Firestore agar bisa dikirim saat navigasi
                     cat.id = document.id
                     postList.add(cat)
                 }
-                // Beri tahu adapter bahwa data telah berubah
                 historyAdapter.notifyDataSetChanged()
 
                 if (postList.isEmpty()) {
                     Toast.makeText(context, "Anda belum memiliki postingan.", Toast.LENGTH_SHORT).show()
                 }
-                progressBar.isVisible = false // Sembunyikan loading
+                progressBar.isVisible = false
             }
             .addOnFailureListener { exception ->
-                progressBar.isVisible = false // Sembunyikan loading jika gagal
+                progressBar.isVisible = false
                 Log.w("PostingHistory", "Error getting documents: ", exception)
                 Toast.makeText(context, "Gagal memuat riwayat.", Toast.LENGTH_SHORT).show()
             }

@@ -1,4 +1,4 @@
-// Pastikan file ini ada di package: com.litegral.pawpal.akbar
+
 package com.litegral.pawpal.akbar.fitur_petDetail
 
 import android.graphics.Color
@@ -26,13 +26,13 @@ import com.litegral.pawpal.akbar.fitur_petDetail.adapter.PetImageSliderAdapter
 
 class PetDetailFragment : Fragment() {
 
-    // Menerima petId dari fragment sebelumnya
+
     private val args: PetDetailFragmentArgs by navArgs()
 
-    // Firebase
+
     private lateinit var db: FirebaseFirestore
 
-    // Deklarasi Views
+
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var buttonBack: ImageButton
@@ -91,16 +91,16 @@ class PetDetailFragment : Fragment() {
     }
 
     private fun loadPetDetailsFromFirestore(petId: String) {
-        setLoading(true) // Tampilkan loading
+        setLoading(true)
 
-        // Mengambil satu dokumen dari koleksi 'pets' berdasarkan ID-nya
+        // AMBIL SATU DOCUMENT BERDASARKNA ID YANG DI DAPATKAN DARI APA YANG DI PENCET OLEH USER
         db.collection("pets").document(petId).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    // Konversi dokumen Firestore ke objek CatModel
+
                     val pet = document.toObject(CatModel::class.java)
                     if (pet != null) {
-                        // Jika berhasil, panggil fungsi untuk menampilkan data ke UI
+
                         displayPetData(pet)
                     } else {
                         handleDataNotFound()
@@ -108,7 +108,7 @@ class PetDetailFragment : Fragment() {
                 } else {
                     handleDataNotFound()
                 }
-                setLoading(false) // Sembunyikan loading setelah selesai
+                setLoading(false)
             }
             .addOnFailureListener { exception ->
                 setLoading(false)
@@ -117,7 +117,7 @@ class PetDetailFragment : Fragment() {
             }
     }
 
-    // Fungsi baru untuk mengisi UI dengan data dari Firestore
+    // FUNCTION UNTUK MENGISI DATA BERDASARKAN HASIL PENGAMBILAN DATA
     private fun displayPetData(pet: CatModel) {
         // Isi semua TextView dengan data
         textPetName.text = pet.name
@@ -125,7 +125,7 @@ class PetDetailFragment : Fragment() {
         textPetAge.text = pet.age
         textPetDescription.text = pet.description
 
-        // Atur gender dan warnanya
+        // MALE ATAU FEMALE LOGIC GENDER COLOR
         if (pet.isFemale) {
             textGender.text = "♀"
             textGender.setTextColor(Color.parseColor("#F200FF"))
@@ -141,7 +141,7 @@ class PetDetailFragment : Fragment() {
             viewPager.adapter = imageSliderAdapter
             viewPager.visibility = View.VISIBLE
 
-            // Tampilkan indikator titik jika gambar lebih dari 1
+            // indikator titik
             if (pet.imageUrls.size > 1) {
                 tabLayout.visibility = View.VISIBLE
                 TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
@@ -149,7 +149,6 @@ class PetDetailFragment : Fragment() {
                 tabLayout.visibility = View.GONE
             }
         } else {
-            // Handle jika tidak ada gambar sama sekali
             viewPager.visibility = View.GONE
             tabLayout.visibility = View.GONE
         }

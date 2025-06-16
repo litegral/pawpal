@@ -1,4 +1,4 @@
-package com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser // Sesuaikan package Anda
+package com.litegral.pawpal.akbar.fitur_ListOpenAdoptOfUser
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -78,6 +78,7 @@ class UpdatePostFragment : Fragment() {
         buttonDelete.setOnClickListener { showDeleteConfirmationDialog() }
     }
 
+    // LOAD DATA SEBELUMNYA UNTUK UPDATE
     private fun loadPetDetailsFromFirestore(petId: String) {
         setLoading(true)
         db.collection("pets").document(petId).get()
@@ -97,6 +98,7 @@ class UpdatePostFragment : Fragment() {
             }
     }
 
+    // FUNCTION UNTUK MENAMPILKAN GAMBAR DALAM BENTUK SLIDER
     private fun displayPetData(pet: CatModel) {
         textPetName.text = pet.name
         textPetDescription.text = pet.description
@@ -114,6 +116,7 @@ class UpdatePostFragment : Fragment() {
         }
     }
 
+    // FUCNTION UNTUK NAVIGASI KE HALAMAN UPDATE FORM
     private fun navigateToEditForm() {
         val petId = args.petId
         try {
@@ -124,6 +127,7 @@ class UpdatePostFragment : Fragment() {
         }
     }
 
+    // DIALOG
     private fun showDeleteConfirmationDialog() {
         if (context == null || currentPet == null) return
 
@@ -136,11 +140,12 @@ class UpdatePostFragment : Fragment() {
             .show()
     }
 
+    // LOGIC DELETE
     private fun performDelete() {
         val petToDelete = currentPet ?: return
         setLoading(true)
 
-        // Hapus gambar dari Storage, lalu hapus dokumen dari Firestore
+        // HAPUS GAMBAR YANG ADA DAN HAPUS DOCUMENT
         deleteImagesFromStorage(petToDelete.imageUrls) { allImagesDeleted ->
             if (allImagesDeleted) {
                 deletePostFromFirestore(petToDelete.id)
@@ -151,6 +156,7 @@ class UpdatePostFragment : Fragment() {
         }
     }
 
+    // FUNCTION YANG DI PANGGIKL DI PERFORM DELETE UNTUK DELETE GAMBAR PADA DOCUMENT BERDASARKAN ID
     private fun deleteImagesFromStorage(imageUrls: List<String>, onComplete: (Boolean) -> Unit) {
         if (imageUrls.isEmpty()) {
             onComplete(true); return
@@ -174,6 +180,7 @@ class UpdatePostFragment : Fragment() {
         }
     }
 
+    // FUNCTION YANG DI PANGGIKL DI PERFORM DELETE UNTUK DELETE POSTINGAN PADA DOCUMENT BERDASARKAN ID
     private fun deletePostFromFirestore(petId: String) {
         db.collection("pets").document(petId).delete()
             .addOnSuccessListener {
