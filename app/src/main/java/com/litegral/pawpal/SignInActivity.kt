@@ -60,7 +60,7 @@ class SignInActivity : AppCompatActivity() {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
-        // --- PERUBAHAN LOGIKA DI SINI ---
+
         googleSignInButton.setOnClickListener {
             // Selalu sign out dari Google terlebih dahulu untuk memaksa pemilihan akun
             googleSignInClient.signOut().addOnCompleteListener {

@@ -20,14 +20,13 @@ class HomepageAdapter(
         private val imageCat: ImageView = view.findViewById(R.id.imageCat)
         private val textName: TextView = view.findViewById(R.id.textName)
         private val textAge: TextView = view.findViewById(R.id.textAge)
-        private val textLocation: TextView = view.findViewById(R.id.textLocation)
         private val textGender: TextView = view.findViewById(R.id.textGender)
 
         // FUNCTION PEMASUKAN DATA KE DALAM UI
         fun bind(pet: CatModel, onItemClicked: (CatModel) -> Unit) {
             textName.text = pet.name
             textAge.text = pet.age
-            textLocation.text = pet.petPosition
+
 
 
 

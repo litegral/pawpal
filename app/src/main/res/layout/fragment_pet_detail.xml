@@ -99,22 +99,7 @@
 
 
 
-            <TextView
-                android:id="@+id/textView_certified_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Certified"
-                android:background="@drawable/certified_bg_placeholder"
-                android:textColor="#A67C00"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/textView_pet_age_detail"
-                app:layout_constraintStart_toStartOf="parent" />
+
 
             <TextView
                 android:id="@+id/textView_pet_description_detail"
@@ -125,7 +110,7 @@
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Blandit risus molestie diam, eu volutpat, tellus amet morbi. Mauris sed enim eget enim massa nulla rhoncus pellentesque. In a fames integer maecenas sed lectus quam etiam cursus. Diam diam tortor, a odio commodo commodo et pulvinar."
                 android:textColor="#555555"
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@+id/textView_certified_detail"
+                app:layout_constraintTop_toBottomOf="@+id/textView_pet_age_detail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -139,11 +124,12 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
+        android:textColor="#ffffff"
         android:text="Adopt Me"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:backgroundTint="#4A4A4A"
+        android:backgroundTint="#464646"
         app:cornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

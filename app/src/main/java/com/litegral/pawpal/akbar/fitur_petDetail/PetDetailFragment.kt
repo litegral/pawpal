@@ -19,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.litegral.pawpal.R
 import com.litegral.pawpal.akbar.model.CatModel
@@ -31,7 +32,7 @@ class PetDetailFragment : Fragment() {
 
 
     private lateinit var db: FirebaseFirestore
-
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
@@ -55,6 +56,7 @@ class PetDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         initViews(view)
         setupClickListeners()
@@ -100,6 +102,22 @@ class PetDetailFragment : Fragment() {
 
                     val pet = document.toObject(CatModel::class.java)
                     if (pet != null) {
+
+
+
+                        // 1. Dapatkan ID pengguna yang sedang login
+                        val currentUserId = auth.currentUser?.uid
+
+                        // 2. Bandingkan ID pemilik hewan (uploaderUid) dengan ID pengguna saat ini
+                        if (pet.uploaderUid == currentUserId) {
+                            // Jika ID-nya SAMA, berarti ini adalah pemiliknya. Sembunyikan tombol.
+                            buttonAdoptMe.visibility = View.GONE
+                        } else {
+                            // Jika ID-nya BEDA, tampilkan tombol untuk pengguna lain.
+                            buttonAdoptMe.visibility = View.VISIBLE
+                        }
+
+
 
                         displayPetData(pet)
                     } else {

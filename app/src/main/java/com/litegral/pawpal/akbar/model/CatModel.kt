@@ -17,7 +17,6 @@ data class CatModel(
     var isFemale: Boolean = false,
     var breed: String = "",
     var description: String = "",
-    var petPosition: String = "",
     var imageUrls: List<String> = listOf(),
     @ServerTimestamp
     var postedDate: Date? = null
