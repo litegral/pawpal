@@ -15,11 +15,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpActivity : AppCompatActivity() {
 
-    // Deklarasi untuk Firebase
+
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-    // Deklarasi untuk View
+
     private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
@@ -28,7 +28,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activty_sign_up) // Pastikan nama layout ini benar
+        setContentView(R.layout.activty_sign_up)
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -86,7 +86,7 @@ class SignUpActivity : AppCompatActivity() {
                                         Toast.LENGTH_LONG).show()
                                 }
                             }
-                        // --- AKHIR LOGIKA PENGIRIMAN EMAIL ---
+
                     }
 
                     // 3. Langsung arahkan ke halaman Sign In
@@ -99,7 +99,7 @@ class SignUpActivity : AppCompatActivity() {
             }
     }
 
-    // Fungsi untuk menyimpan data profil ke Cloud Firestore (tetap sama)
+
     private fun createUserProfileInFirestore(user: FirebaseUser, name: String) {
         val userId = user.uid
         val userDocumentRef = db.collection("users").document(userId)
@@ -107,7 +107,7 @@ class SignUpActivity : AppCompatActivity() {
             "uid" to userId,
             "displayName" to name,
             "email" to user.email,
-            "profilePhotoUrl" to "", // <-- TAMBAHKAN INI: beri nilai awal kosong
+            "profilePhotoUrl" to "",
             "createdAt" to FieldValue.serverTimestamp()
         )
         userDocumentRef.set(userData).addOnSuccessListener {
@@ -117,7 +117,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    // Fungsi untuk navigasi ke halaman Sign In (tetap sama)
+
     private fun navigateToSignIn() {
         val intent = Intent(this, SignInActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

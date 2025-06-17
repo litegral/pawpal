@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEF2FB"
     tools:context=".akbar.fitur_HomePage.HomeFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -48,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:fontFamily="@font/fuzzy_bubbles_regular"
+        android:textColor="@color/black"
         android:text="Give Them a Home\nand They’ll Give You \na Lifetime of Love."
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/banner"

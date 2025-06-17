@@ -49,7 +49,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Listener untuk menerima data dari CreateAdoptPostFragment
-        // dan memuat ulang daftar untuk menampilkan data baru.
         setFragmentResultListener("newPetPostRequest") { _, _ ->
             Toast.makeText(context, "Memperbarui daftar...", Toast.LENGTH_SHORT).show()
             loadPetsFromFirestore()
@@ -66,7 +65,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi Firebase
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
@@ -74,7 +73,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         setupClickListeners()
         setupRecyclerView()
 
-        // Memuat data dari Firestore saat fragment dibuat
+
         loadPetsFromFirestore()
     }
 
@@ -88,7 +87,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         recyclerView = view.findViewById(R.id.recyclerView)
         progressBar = view.findViewById(R.id.progressBar_home)
         fabAddNewPost = view.findViewById(R.id.fab_add_new_post)
-        // Inisialisasi view untuk nama dan gambar profil
         profileNameTextView = view.findViewById(R.id.profile_name_home_top)
         profileImageView = view.findViewById(R.id.profile_image_home_top)
     }
@@ -96,7 +94,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
     private fun setupClickListeners() {
 
         fabAddNewPost.setOnClickListener(this)
-        // Tambahkan listener untuk elemen profil
         profileImageView.setOnClickListener(this)
         profileNameTextView.setOnClickListener(this)
     }
@@ -116,14 +113,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
         recyclerView.adapter = homepageAdapter
     }
 
-    // --- FUNGSI BARU UNTUK MENGAMBIL DAN MENAMPILKAN PROFIL PENGGUNA ---
+    // FUNCTION UNTUK MENGAMBIL DAN MENAMPILKAN PROFIL PENGGUNA ---
     private fun loadUserProfile() {
         val userId = auth.currentUser?.uid
-        // Jika tidak ada user yang login, jangan lakukan apa-apa
         if (userId == null) {
             Log.w("HomeFragment", "Tidak ada pengguna yang login, tidak bisa memuat profil.")
-            // Secara teori, blok ini tidak akan pernah dijangkau karena ada pengecekan di MainActivity
-            // Namun ini adalah pengaman yang baik.
             return
         }
 
@@ -131,34 +125,30 @@ class HomeFragment : Fragment(), View.OnClickListener {
         db.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    // Ambil data nama dan URL foto dari dokumen
                     val name = document.getString("displayName")
                     val imageUrl = document.getString("profilePhotoUrl")
 
-                    // Tampilkan nama pengguna
+                    // Tampilkan nama USER
                     profileNameTextView.text = name ?: "Pengguna"
 
-                    // Cek jika URL gambar ada dan tidak kosong
+                    // Cek url
                     if (!imageUrl.isNullOrEmpty()) {
-                        // Gunakan Glide untuk memuat gambar dari URL ke ImageView
                         Glide.with(this)
                             .load(imageUrl)
-                            .placeholder(R.drawable.ic_profile_placeholder) // Gambar default saat loading
-                            .error(R.drawable.ic_profile_placeholder) // Gambar jika URL error
+                            .placeholder(R.drawable.ic_profile_placeholder)
+                            .error(R.drawable.ic_profile_placeholder)
                             .into(profileImageView)
                     } else {
-                        // Jika tidak ada URL foto, tampilkan gambar placeholder default
                         profileImageView.setImageResource(R.drawable.ic_profile_placeholder)
                     }
                 } else {
-                    // Kasus jika dokumen pengguna tidak ditemukan di Firestore
+
                     Log.w("HomeFragment", "Dokumen profil tidak ditemukan untuk user: $userId")
                     profileNameTextView.text = auth.currentUser?.displayName ?: "Pengguna"
                 }
             }
             .addOnFailureListener { exception ->
                 Log.e("HomeFragment", "Gagal mengambil data profil dari Firestore", exception)
-                // Jika gagal, tampilkan nama default dari Auth jika ada
                 profileNameTextView.text = auth.currentUser?.displayName ?: "Pengguna"
             }
     }

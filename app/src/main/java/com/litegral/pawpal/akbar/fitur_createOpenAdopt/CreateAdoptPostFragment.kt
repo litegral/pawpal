@@ -69,6 +69,9 @@ class CreateAdoptPostFragment : Fragment() {
                 selectedProfilePhotoUri = uri
                 imageViewProfilePhotoPreview.setImageURI(uri)
                 imageViewProfilePhotoPreview.setPadding(0, 0, 0, 0)
+
+                // Panggil fungsi utama untuk mengevaluasi ulang status tombol
+                updateUploadButtonState()
             }
         }
 
@@ -287,30 +290,74 @@ class CreateAdoptPostFragment : Fragment() {
 
     private fun mergeUrls(oldUrls: List<String>, newUrls: Map<Uri, String>): List<String> {
         val finalList = oldUrls.toMutableList()
-        // Ganti foto profil jika ada yang baru
-        selectedProfilePhotoUri?.let {
-            // Hapus foto profil lama dari storage
+
+        // Logika untuk mengganti foto profil jika ada yang baru
+        selectedProfilePhotoUri?.let { newProfileUri ->
+            // Coba hapus foto profil lama dari storage jika ada
             if (oldUrls.isNotEmpty() && oldUrls[0].isNotBlank()) {
-                storage.getReferenceFromUrl(oldUrls[0]).delete()
+                try {
+                    storage.getReferenceFromUrl(oldUrls[0]).delete()
+                        .addOnSuccessListener {
+                            Log.d("CreateAdoptPost", "Foto profil lama berhasil dihapus: ${oldUrls[0]}")
+                        }
+                        .addOnFailureListener { e ->
+                            // Jika gagal, cukup log error dan lanjutkan.
+                            // Ini akan menangani error 404 jika file sudah tidak ada.
+                            Log.w("CreateAdoptPost", "Gagal menghapus foto profil lama. Mungkin sudah dihapus atau URL tidak valid.", e)
+                        }
+                } catch (e: IllegalArgumentException) {
+                    // Menangkap URL yang tidak valid yang tidak bisa diparsing
+                    Log.e("CreateAdoptPost", "URL foto profil lama tidak valid, tidak bisa dihapus.", e)
+                }
             }
-            finalList[0] = newUrls[it]!!
+
+            // Ganti URL foto profil di daftar dengan aman
+            val newProfileUrl = newUrls[newProfileUri]
+            if (newProfileUrl != null) {
+                if (finalList.isNotEmpty()) {
+                    // Jika sudah ada URL sebelumnya (untuk foto profil), ganti.
+                    finalList[0] = newProfileUrl
+                } else {
+                    // Jika belum ada URL sama sekali, tambahkan sebagai yang pertama.
+                    finalList.add(newProfileUrl)
+                }
+            }
         }
-        // Tambahkan URL dokumen baru
-        selectedDocumentUris.forEach {
-            finalList.add(newUrls[it]!!)
+
+        // Tambahkan URL dokumen baru yang dipilih ke dalam daftar
+        selectedDocumentUris.forEach { docUri ->
+            newUrls[docUri]?.let { finalList.add(it) }
         }
-        return finalList
+
+        // Menggunakan distinct() untuk memastikan tidak ada URL duplikat
+        return finalList.distinct()
     }
     // FUNGSI UNTUK MENGONTROL TOMBOL UPLOAD DOKUMEN
     private fun updateUploadButtonState() {
-        // Hitung total dokumen (yang sudah ada + yang baru dipilih)
+        // Syarat Pertama (WAJIB): Cek apakah foto profil kucing sudah ada.
+        // Foto dianggap ada jika:
+        // 1. Pengguna baru saja memilihnya (selectedProfilePhotoUri tidak null), ATAU
+        // 2. Sedang dalam mode edit dan postingan itu sudah punya gambar (existingImageUrls tidak kosong).
+        val hasProfilePhoto = selectedProfilePhotoUri != null || (isEditMode && existingImageUrls.isNotEmpty())
+
+        // Jika Syarat Pertama TIDAK TERPENUHI, maka tombol dokumen SELALU nonaktif.
+        if (!hasProfilePhoto) {
+            buttonUploadDocument.isEnabled = false
+            buttonUploadDocument.alpha = 0.5f
+            buttonUploadDocument.text = "Pilih Foto Profil Dulu"
+            return
+        }
+
+        // Jika Syarat Pertama TERPENUHI, baru lanjutkan ke pengecekan kedua (batas jumlah dokumen).
         val totalDocumentCount = existingImageUrls.drop(1).size + selectedDocumentUris.size
 
         if (totalDocumentCount >= MAX_DOCUMENTS) {
-            buttonUploadDocument.isEnabled = false // Nonaktifkan tombol
+            buttonUploadDocument.isEnabled = false
+            buttonUploadDocument.alpha = 0.5f
             buttonUploadDocument.text = "Batas Dokumen Tercapai"
         } else {
-            buttonUploadDocument.isEnabled = true // Aktifkan tombol
+            buttonUploadDocument.isEnabled = true
+            buttonUploadDocument.alpha = 1.0f // Tampilan normal
             buttonUploadDocument.text = "Pilih Dokumen"
         }
     }
@@ -323,7 +370,7 @@ class CreateAdoptPostFragment : Fragment() {
         val newPet = CatModel(
             id = newPetId, uploaderUid = uploaderId, uploaderName = auth.currentUser?.displayName ?: "",
             name = name, age = age, isFemale = isFemale, breed = breed, description = description,
-            imageUrls = imageUrls, petPosition = "Bogor"
+            imageUrls = imageUrls
         )
         db.collection("pets").document(newPetId).set(newPet)
             .addOnSuccessListener {
